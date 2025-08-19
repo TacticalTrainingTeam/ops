@@ -10,7 +10,7 @@ name = "komodo"
 [stack.config]
 server = "local"
 poll_for_updates = true
-linked_repo = "homelab"
+linked_repo = "ops"
 run_directory = "docker/komodo"
 environment = """
 DOCKER_DATA_DIR=[[DOCKER_DATA_DIR]]
@@ -31,7 +31,7 @@ name = "periphery"
 [stack.config]
 server = "local"
 poll_for_updates = true
-linked_repo = "homelab"
+linked_repo = "ops"
 run_directory = "docker/periphery"
 environment = """
 PERIPHERY_PASSKEYS=[[PERIPHERY_PASSKEYS]]
