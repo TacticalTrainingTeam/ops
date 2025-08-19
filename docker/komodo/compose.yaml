@@ -39,7 +39,7 @@ services:
     networks:
       - "default"
       - "periphery"
-#      - "proxy"
+      - "proxy"
     environment:
       KOMODO_DATABASE_ADDRESS: "mongo:27017"
       KOMODO_DATABASE_USERNAME: "${KOMODO_DB_USERNAME:?error}"
