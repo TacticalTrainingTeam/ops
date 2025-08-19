@@ -20,15 +20,15 @@ services:
     container_name: "komodo-core"
     labels:
       komodo.skip: # Prevent Komodo from stopping with StopAllContainers
-#      traefik.enable: true
-#      traefik.http.routers.komodo-internal.entrypoints: "websecure-internal"
-#      traefik.http.routers.komodo-external.entrypoints: "websecure-external"
-#      traefik.http.routers.komodo-internal.rule: "Host(`komodo.${TRAEFIK_DOMAINNAME_1:?error}`)"
-#      traefik.http.routers.komodo-external.rule: "Host(`komodo.${TRAEFIK_DOMAINNAME_1:?error}`)"
-#      traefik.http.routers.komodo-internal.service: "komodo"
-#      traefik.http.routers.komodo-external.service: "komodo"
+      traefik.enable: true
+      traefik.http.routers.komodo-internal.entrypoints: "websecure-internal"
+      traefik.http.routers.komodo-external.entrypoints: "websecure-external"
+      traefik.http.routers.komodo-internal.rule: "Host(`komodo.${TRAEFIK_DOMAINNAME_1:?error}`)"
+      traefik.http.routers.komodo-external.rule: "Host(`komodo.${TRAEFIK_DOMAINNAME_1:?error}`)"
+      traefik.http.routers.komodo-internal.service: "komodo"
+      traefik.http.routers.komodo-external.service: "komodo"
 #      traefik.http.routers.komodo-external.middlewares: "badger@docker"
-#      traefik.http.services.komodo.loadbalancer.server.port: 9120
+      traefik.http.services.komodo.loadbalancer.server.port: 9120
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
@@ -62,6 +62,6 @@ networks:
   periphery:
     external: true
     name: "${PERIPHERY_NETWORK_NAME:-periphery_default}"
-#  proxy:
-#    external: true
-#    name: "${TRAEFIK_NETWORK_NAME:-proxy}"
+  proxy:
+    external: true
+    name: "${TRAEFIK_NETWORK_NAME:-proxy}"
