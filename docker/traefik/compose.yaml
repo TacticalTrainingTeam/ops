@@ -1,0 +1,144 @@
+services:
+  socket-proxy:
+    image: "lscr.io/linuxserver/socket-proxy:3.2.3"
+    container_name: "socket-proxy"
+    security_opt:
+      - "label:disable"
+      - "no-new-privileges:true"
+    environment:
+      CONTAINERS: 1
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    restart: "unless-stopped"
+    read_only: true
+    tmpfs:
+      - "/run"
+  traefik:
+    container_name: "traefik"
+    image: "traefik:3.5.0"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    ports:
+      - "80:80"
+      - "8080:8080"
+      - "443:443"
+      - "443:443/udp" # http3
+      - "8443:8443"
+      - "8443:8443/udp" # http3
+      - "8090:8090"
+    healthcheck:
+      test: [ 'CMD', 'traefik', 'healthcheck', '--ping' ]
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/letsencrypt:/letsencrypt:z" # Volume to store the Let's Encrypt certificates
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/rules:/rules:z" # Volume to store traefik dynamic configuration files
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/logs:/logs:z" # Volume to store traefik logs
+    environment:
+      TZ: "Europe/Berlin"
+      CF_API_KEY: "${CF_API_KEY:?error}" # Environment variable for Cloudflare API key
+      DOMAINNAME_1:  "${DOMAINNAME_1:?error}" # Environment variable for the primary domain name
+    configs:
+      - source: "traefik_static"
+        target: "/etc/traefik/traefik.yaml"
+    networks:
+      default:
+      proxy:
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.traefik.entrypoints=websecure-internal"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.$DOMAINNAME_1`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+networks:
+  default: {}
+  proxy:
+    name: "${TRAEFIK_NETWORK_NAME:-proxy}"
+configs:
+  traefik_static:
+    content: |
+      global:
+        checkNewVersion: true
+        sendAnonymousUsage: false
+      
+      entryPoints:
+        web-external:
+          address: ":8080"
+          http:
+            redirections:
+              entryPoint:
+                to: websecure-external
+                scheme: https
+                permanent: true
+        web-internal:
+          address: ":80"
+          http:
+            redirections:
+              entryPoint:
+                to: websecure-internal
+                scheme: https
+                permanent: true
+        websecure-external:
+          address: ":8443"
+          http3:
+            advertisedPort: 443
+          http:
+            tls:
+              certResolver: "letsencrypt"
+              domains:
+                - main: "${DOMAINNAME_1}"
+                  sans:
+                    - "*.${DOMAINNAME_1}"
+        websecure-internal:
+          address: ":443"
+          http3: true
+          http:
+            tls:
+              certResolver: letsencrypt
+              domains:
+                - main: "${DOMAINNAME_1}"
+                  sans:
+                    - "*.${DOMAINNAME_1}"
+        traefik:
+          address: ":8090"
+      
+      api:
+        dashboard: true
+        insecure: true
+      
+      ping: {}
+      
+      log:
+        # filePath: "/logs/traefik.log"
+        level: "INFO"  # (Default: error) DEBUG, INFO, WARN, ERROR, FATAL, PANIC
+        # format: "json"  # (Default: common) common, json
+        maxSize: 100
+        maxBackups: 3
+        maxAge: 3
+        compress: true
+      
+      accessLog:
+        filePath: "/logs/access.log"
+        # format: "json"  # (Default: common) common, json
+      
+      providers:
+        docker:
+          endpoint: "tcp://socket-proxy:2375"
+          exposedByDefault: false
+          network: "${TRAEFIK_NETWORK_NAME:-proxy}"
+        file:
+          directory: "/rules"  # Load dynamic configuration from one or more .toml or .yml files in a directory
+          watch: true          # Only works on top level files in the rules folder
+      
+      certificatesResolvers:
+        letsencrypt:
+          acme:
+            dnsChallenge:
+              provider: "cloudflare"
+            email: "${DOMAINNAME_1_EMAIL:?error}"
+            storage: "/letsencrypt/acme.json"
+            caServer: "https://acme-v02.api.letsencrypt.org/directory"
+      
+      experimental:
+        plugins:
+          badger:
+            moduleName: "github.com/fosrl/badger"
+            version: "v1.2.0"
