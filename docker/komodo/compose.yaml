@@ -1,0 +1,67 @@
+services:
+  mongo:
+    image: "mongo:8.0.12"
+    container_name: "komodo-mongo"
+    labels:
+      komodo.skip: # Prevent Komodo from stopping with StopAllContainers
+    command: "--quiet --wiredTigerCacheSizeGB 0.25"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/mongo-data:/data/db:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/mongo-config:/data/configdb:z"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: "${KOMODO_DB_USERNAME:?error}"
+      MONGO_INITDB_ROOT_PASSWORD: "${KOMODO_DB_PASSWORD:?error}"
+
+  core:
+    image: "ghcr.io/moghtech/komodo-core:1.19.0"
+    container_name: "komodo-core"
+    labels:
+      komodo.skip: # Prevent Komodo from stopping with StopAllContainers
+#      traefik.enable: true
+#      traefik.http.routers.komodo-internal.entrypoints: "websecure-internal"
+#      traefik.http.routers.komodo-external.entrypoints: "websecure-external"
+#      traefik.http.routers.komodo-internal.rule: "Host(`komodo.${TRAEFIK_DOMAINNAME_1:?error}`)"
+#      traefik.http.routers.komodo-external.rule: "Host(`komodo.${TRAEFIK_DOMAINNAME_1:?error}`)"
+#      traefik.http.routers.komodo-internal.service: "komodo"
+#      traefik.http.routers.komodo-external.service: "komodo"
+#      traefik.http.routers.komodo-external.middlewares: "badger@docker"
+#      traefik.http.services.komodo.loadbalancer.server.port: 9120
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    depends_on:
+      - "mongo"
+    ports:
+      - "9120:9120"
+    networks:
+      - "default"
+      - "periphery"
+#      - "proxy"
+    environment:
+      KOMODO_DATABASE_ADDRESS: "mongo:27017"
+      KOMODO_DATABASE_USERNAME: "${KOMODO_DB_USERNAME:?error}"
+      KOMODO_DATABASE_PASSWORD: "${KOMODO_DB_PASSWORD:?error}"
+      KOMODO_FIRST_SERVER: "https://periphery:8120"
+      KOMODO_FIRST_SERVER_NAME: "local"
+      KOMODO_PASSKEY: "${KOMODO_PASSKEY:?error}"
+      KOMODO_HOST: "${KOMODO_HOST:?error}"
+      KOMODO_WEBHOOK_SECRET: "${KOMODO_WEBHOOK_SECRET:?error}"
+      KOMODO_LOCAL_AUTH: "${KOMODO_LOCAL_AUTH:-true}"
+      KOMODO_DISABLE_USER_REGISTRATION: "${KOMODO_DISABLE_USER_REGISTRATION:-true}"
+      KOMODO_DISABLE_NON_ADMIN_CREATE: "${KOMODO_DISABLE_NON_ADMIN_CREATE:-true}"
+      # KOMODO_INIT_ADMIN_USERNAME: "${KOMODO_INIT_ADMIN_USERNAME:?error}" # Only needed for bootstrapping
+      # KOMODO_INIT_ADMIN_PASSWORD: "${KOMODO_INIT_ADMIN_PASSWORD:?error}" # Only needed for bootstrapping
+      TZ: "${TZ:-Europe/Berlin}"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/backups:/backups:z"
+networks:
+  default:
+  periphery:
+    external: true
+    name: "${PERIPHERY_NETWORK_NAME:-periphery_default}"
+#  proxy:
+#    external: true
+#    name: "${TRAEFIK_NETWORK_NAME:-proxy}"
