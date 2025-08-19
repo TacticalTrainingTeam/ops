@@ -58,7 +58,6 @@ params.server_id = "local"
 name = "ops"
 [resource_sync.config]
 linked_repo = "ops"
-webhook_enabled = false
 resource_path = ["komodo/docker0.toml"]
 managed = true
 delete = true
