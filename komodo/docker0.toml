@@ -1,6 +1,7 @@
 [[server]]
 name = "local"
 [server.config]
+address = "https://172.17.0.1:8120"
 enabled = true
 
 ##
