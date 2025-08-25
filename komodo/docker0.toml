@@ -47,19 +47,6 @@ REPOSITORY_PASSWORD=[[KOPIA_REPOSITORY_PASSWORD]]
 ##
 
 [[stack]]
-name = "periphery"
-[stack.config]
-server = "local"
-poll_for_updates = true
-linked_repo = "ops"
-run_directory = "docker/periphery"
-environment = """
-PERIPHERY_PASSKEYS=[[PERIPHERY_PASSKEYS]]
-"""
-
-##
-
-[[stack]]
 name = "traefik"
 [stack.config]
 server = "local"
