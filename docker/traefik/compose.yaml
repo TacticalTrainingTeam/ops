@@ -105,7 +105,7 @@ configs:
               - "2a06:98c0::/29"
               - "2c0f:f248::/32"
         websecure-external-ipv6:
-          address: "[${ENTRYPOINT_EXTERNAL_IPV6}]:443"
+          address: "${ENTRYPOINT_EXTERNAL_IPV6}:443"
           #http3:
           #  advertisedPort: 443
           http:
