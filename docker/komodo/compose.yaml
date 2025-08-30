@@ -22,7 +22,7 @@ services:
       komodo.skip: # Prevent Komodo from stopping with StopAllContainers
       traefik.enable: true
       traefik.http.routers.komodo-internal.entrypoints: "websecure-internal"
-      traefik.http.routers.komodo-external.entrypoints: "websecure-external,websecure-external-ipv6"
+      traefik.http.routers.komodo-external.entrypoints: "websecure-external"
       traefik.http.routers.komodo-internal.rule: "Host(`komodo.${TRAEFIK_DOMAINNAME_1:?error}`)"
       traefik.http.routers.komodo-external.rule: "Host(`komodo.${TRAEFIK_DOMAINNAME_1:?error}`) && PathRegexp(`^/listener/.*$`)"
       traefik.http.routers.komodo-internal.service: "komodo"
