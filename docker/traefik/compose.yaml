@@ -20,12 +20,15 @@ services:
     security_opt:
       - "no-new-privileges:true"
     ports:
-      - "80:80"
-      - "8080:8080"
-      - "443:443"
-      - "443:443/udp" # http3
-      - "8443:8443"
-      - "8443:8443/udp" # http3
+      - "${ENTRYPOINT_INTERNAL_IPV4:?error}:80:80"
+      - "${ENTRYPOINT_INTERNAL_IPV4:?error}:443:443"
+      - "${ENTRYPOINT_INTERNAL_IPV4:?error}:443:443/udp" # http3
+      - "${ENTRYPOINT_EXTERNAL_IPV4:?error}:80:8080"
+      - "${ENTRYPOINT_EXTERNAL_IPV4:?error}:443:8443"
+      - "${ENTRYPOINT_EXTERNAL_IPV4:?error}:443:8443/udp" # http3
+      - "[${ENTRYPOINT_EXTERNAL_IPV6:?error}]:80:8080"
+      - "[${ENTRYPOINT_EXTERNAL_IPV6:?error}]:443:8443"
+      - "[${ENTRYPOINT_EXTERNAL_IPV6:?error}]:443:8443/udp" # http3
       - "8090:8090"
     healthcheck:
       test: [ 'CMD', 'traefik', 'healthcheck', '--ping' ]
