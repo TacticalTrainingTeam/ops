@@ -69,7 +69,7 @@ configs:
                 scheme: https
                 permanent: true
         web-internal:
-          address: "${ENTRYPOINT_INTERNAL_IPV4:?error}:80"
+          address: ":80"
           http:
             redirections:
               entryPoint:
@@ -113,7 +113,7 @@ configs:
               - "2a06:98c0::/29"
               - "2c0f:f248::/32"
         websecure-internal:
-          address: "${ENTRYPOINT_INTERNAL_IPV4:?error}:443"
+          address: ":443"
           #http3: true
           http:
             tls:
