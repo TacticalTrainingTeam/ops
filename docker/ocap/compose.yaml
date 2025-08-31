@@ -1,6 +1,6 @@
 services:
   ocap:
-    build: "https://https://github.com/TacticalTrainingTeam/ocap-web.git"
+    build: "https://github.com/TacticalTrainingTeam/ocap-web.git"
     container_name: "ocap"
     restart: "unless-stopped"
     security_opt:
