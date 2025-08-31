@@ -20,15 +20,15 @@ services:
     security_opt:
       - "no-new-privileges:true"
     ports:
-      - "${ENTRYPOINT_INTERNAL_IPV4:?error}:80:80"
-      - "${ENTRYPOINT_INTERNAL_IPV4:?error}:443:443"
-      - "${ENTRYPOINT_INTERNAL_IPV4:?error}:443:443/udp" # http3
-      - "${ENTRYPOINT_EXTERNAL_IPV4:?error}:80:8080"
-      - "${ENTRYPOINT_EXTERNAL_IPV4:?error}:443:8443"
-      - "${ENTRYPOINT_EXTERNAL_IPV4:?error}:443:8443/udp" # http3
-      - "[${ENTRYPOINT_EXTERNAL_IPV6:?error}]:80:8080"
-      - "[${ENTRYPOINT_EXTERNAL_IPV6:?error}]:443:8443"
-      - "[${ENTRYPOINT_EXTERNAL_IPV6:?error}]:443:8443/udp" # http3
+      - "${ENTRYPOINT_INTERNAL_IPV4:?error}:80:8080"
+      - "${ENTRYPOINT_INTERNAL_IPV4:?error}:443:8443"
+      - "${ENTRYPOINT_INTERNAL_IPV4:?error}:443:8443/udp" # http3
+      - "${ENTRYPOINT_EXTERNAL_IPV4:?error}:80:80"
+      - "${ENTRYPOINT_EXTERNAL_IPV4:?error}:443:443"
+      - "${ENTRYPOINT_EXTERNAL_IPV4:?error}:443:443/udp" # http3
+      - "[${ENTRYPOINT_EXTERNAL_IPV6:?error}]:80:80"
+      - "[${ENTRYPOINT_EXTERNAL_IPV6:?error}]:443:443"
+      - "[${ENTRYPOINT_EXTERNAL_IPV6:?error}]:443:443/udp" # http3
       - "8090:8090"
     healthcheck:
       test: [ 'CMD', 'traefik', 'healthcheck', '--ping' ]
@@ -64,7 +64,7 @@ configs:
       
       entryPoints:
         web-external:
-          address: ":8080"
+          address: ":80"
           http:
             redirections:
               entryPoint:
@@ -72,7 +72,7 @@ configs:
                 scheme: https
                 permanent: true
         web-internal:
-          address: ":80"
+          address: ":8080"
           http:
             redirections:
               entryPoint:
@@ -80,9 +80,8 @@ configs:
                 scheme: https
                 permanent: true
         websecure-external:
-          address: ":8443"
-          #http3:
-          #  advertisedPort: 443
+          address: ":443"
+          #http3: true
           http:
             tls:
               certResolver: "letsencrypt"
@@ -116,8 +115,9 @@ configs:
               - "2a06:98c0::/29"
               - "2c0f:f248::/32"
         websecure-internal:
-          address: ":443"
+          address: ":8443"
           #http3: true
+          #  advertisedPort: 443
           http:
             tls:
               certResolver: letsencrypt
