@@ -47,6 +47,22 @@ REPOSITORY_PASSWORD=[[KOPIA_REPOSITORY_PASSWORD]]
 ##
 
 [[stack]]
+name = "ocap"
+[stack.config]
+server = "local"
+poll_for_updates = true
+destroy_before_deploy = true
+linked_repo = "ops"
+run_directory = "docker/ocap"
+environment = """
+DOCKER_DATA_DIR=[[DOCKER_DATA_DIR]]
+TRAEFIK_DOMAINNAME_1=[[TRAEFIK_DOMAINNAME_1]]
+OCAP_SECRET=[[OCAP_SECRET]]
+"""
+
+##
+
+[[stack]]
 name = "traefik"
 [stack.config]
 server = "local"

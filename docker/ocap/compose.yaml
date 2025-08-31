@@ -1,0 +1,27 @@
+services:
+  ocap:
+    image: "ghcr.io/ocap2/web:2.0"
+    container_name: "ocap"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    environment:
+      OCAP_SECRET: "${OCAP_SECRET:?error}"
+      OCAP_CUSTOMIZE_WEBSITEURL: "replay.${TRAEFIK_DOMAINNAME_1:?error}"
+      OCAP_CUSTOMIZE_WEBSITELOGO: "https://www.tacticalteam.de/assets/favicon/favicon-32x32.png"
+    networks:
+      proxy:
+    labels:
+      traefik.enable: true
+      traefik.http.routers.ocap.entrypoints: "websecure-internal,websecure-external"
+      traefik.http.routers.ocap.rule: "Host(`replay.${TRAEFIK_DOMAINNAME_1:?error}`)"
+      traefik.http.routers.ocap.service: "ocap"
+      traefik.http.services.ocap.loadbalancer.server.port: 5000
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/data:/var/lib/ocap/data:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db:/var/lib/ocap/db:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/maps:/var/lib/ocap/maps/:z"
+networks:
+  proxy:
+    external: true
+    name: "${TRAEFIK_NETWORK_NAME:-proxy}"
