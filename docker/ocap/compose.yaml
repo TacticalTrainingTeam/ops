@@ -7,7 +7,7 @@ services:
       - "no-new-privileges:true"
     environment:
       OCAP_SECRET: "${OCAP_SECRET:?error}"
-      OCAP_CUSTOMIZE_WEBSITEURL: "replay.${TRAEFIK_DOMAINNAME_1:?error}"
+      OCAP_CUSTOMIZE_WEBSITEURL: "https://www.tacticalteam.de"
       OCAP_CUSTOMIZE_WEBSITELOGO: "https://www.tacticalteam.de/assets/favicon/favicon-32x32.png"
     networks:
       proxy:
