@@ -1,6 +1,6 @@
 services:
   ocap:
-    image: "ghcr.io/ocap2/web:2.0"
+    build: "https://https://github.com/TacticalTrainingTeam/ocap-web.git"
     container_name: "ocap"
     restart: "unless-stopped"
     security_opt:
