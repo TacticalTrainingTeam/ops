@@ -7,6 +7,25 @@ enabled = true
 ##
 
 [[stack]]
+name = "arma3sync-repo"
+[stack.config]
+server = "local"
+run_build = true
+poll_for_updates = true
+destroy_before_deploy = true
+linked_repo = "ops"
+run_directory = "docker/arma3sync-repo"
+environment = """
+TRAEFIK_DOMAINNAME_1=[[TRAEFIK_DOMAINNAME_1]]
+SMB_USERNAME=[[COMMON_SMB_USERNAME]]
+SMB_PASSWORD=[[COMMON_SMB_PASSWORD]]
+SMB_HOST=[[COMMON_SMB_HOST]]
+SMB_PATH=[[ARMA3SYNC_REPO_SMB_PATH]]
+"""
+
+##
+
+[[stack]]
 name = "komodo"
 [stack.config]
 server = "local"
