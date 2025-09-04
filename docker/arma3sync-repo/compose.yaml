@@ -34,3 +34,7 @@ configs:
           autoindex on;
         }
       }
+networks:
+  proxy:
+    external: true
+    name: "${TRAEFIK_NETWORK_NAME:-proxy}"
