@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{.Title}}</title>
+    <title>{{.Name}}</title>
     <link rel="icon" href="https://tacticalteam.de/assets/favicon/favicon.ico">
 
     <!-- Fonts -->
@@ -156,7 +156,7 @@
 <body>
 <header>
     <img src="https://wiki.tacticalteam.de/bilder/ttt_logo.png" alt="Logo">
-    <h1>{{.Title}}</h1>
+    <h1>{{.Name}}</h1>
 </header>
 
 <main>
@@ -240,7 +240,6 @@
             }
         }
 
-        // Grid filter
         const items = fileGrid.getElementsByClassName("grid-item");
         Array.from(items).forEach(item => {
             const name = item.getElementsByTagName("a")[0].textContent.toLowerCase();
@@ -248,7 +247,7 @@
         });
     }
 
-    // Sorting function (simple)
+    // Sorting function
     function sortTable(n) {
         let switching = true;
         let dir = "asc";
