@@ -7,18 +7,10 @@
 {{ end -}}
 {{- define "icon"}}
 {{- if .IsDir}}
-{{- if .IsSymlink}}
-<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-folder-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-    <path d="M9 3a1 1 0 0 1 .608 .206l.1 .087l2.706 2.707h6.586a3 3 0 0 1 2.995 2.824l.005 .176v8a3 3 0 0 1 -2.824 2.995l-.176 .005h-14a3 3 0 0 1 -2.995 -2.824l-.005 -.176v-11a3 3 0 0 1 2.824 -2.995l.176 -.005h4z" stroke-width="0" fill="currentColor"/>
-    <path fill="#000" d="M2.795 17.306c0-2.374 1.792-4.314 4.078-4.538v-1.104a.38.38 0 0 1 .651-.272l2.45 2.492a.132.132 0 0 1 0 .188l-2.45 2.492a.381.381 0 0 1-.651-.272V15.24c-1.889.297-3.436 1.39-3.817 3.26a2.809 2.809 0 0 1-.261-1.193Z" stroke-width=".127478"/>
-</svg>
-{{- else}}
 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-folder-filled" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
     <path d="M9 3a1 1 0 0 1 .608 .206l.1 .087l2.706 2.707h6.586a3 3 0 0 1 2.995 2.824l.005 .176v8a3 3 0 0 1 -2.824 2.995l-.176 .005h-14a3 3 0 0 1 -2.995 -2.824l-.005 -.176v-11a3 3 0 0 1 2.824 -2.995l.176 -.005h4z" stroke-width="0" fill="currentColor"/>
 </svg>
-{{- end}}
 {{- else if or (eq .Name "LICENSE") (eq .Name "README")}}
 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-license" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
@@ -285,21 +277,11 @@
     <path d="M15 9h.01"/>
 </svg>
 {{- else}}
-{{- if .IsSymlink}}
-<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-symlink" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-    <path d="M4 21v-4a3 3 0 0 1 3 -3h5"/>
-    <path d="M9 17l3 -3l-3 -3"/>
-    <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
-    <path d="M5 11v-6a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2h-9.5"/>
-</svg>
-{{- else}}
 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
     <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
     <path d="M14 3v4a1 1 0 0 0 1 1h4"/>
     <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"/>
 </svg>
-{{- end}}
 {{- end}}
 {{- end}}
 <!DOCTYPE html>
@@ -1142,15 +1124,7 @@
                     <td>
                         <a href="{{html .URL}}">
                             {{template "icon" .}}
-                            {{- if not .SymlinkPath}}
                             <span class="name">{{html .Name}}</span>
-                            {{- else}}
-                            <span class="name">{{html .Name}} <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-narrow-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-									<path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" />
-									<path d="M15 16l4 -4" />
-									<path d="M15 8l4 4" />
-								</svg> {{html .SymlinkPath}}</span>
-                            {{- end}}
                         </a>
                     </td>
                     {{- if .IsDir}}
@@ -1160,7 +1134,7 @@
                         <div class="sizebar">
                             <div class="sizebar-bar"></div>
                             <div class="sizebar-text">
-                                {{if .IsSymlink}}↱&nbsp;{{end}}{{.HumanSize}}
+                                {{.HumanSize}}
                             </div>
                         </div>
                     </td>
