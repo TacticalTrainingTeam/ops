@@ -100,7 +100,7 @@
             <th>Größe</th>
             <th>Zuletzt geändert am</th>
         </tr>
-        {{- range .Entries }}
+        {{- range .Files }}
         <tr>
             <td>
                 <a href="{{ .Name }}">{{ if .IsDir }}📁 {{ else }}📄 {{ end }}{{ .Name }}</a>
