@@ -8,7 +8,7 @@ services:
       - "no-new-privileges:true"
     volumes:
       - "arma3sync-repo:/srv:ro"
-      - "./browse.html:/templates/browse.html:ro"
+      - "./browse.html:/templates/browse.html:ro,Z"
       # Long syntax is needed because of https://github.com/docker/compose/issues/12993
       - type: "volume"
         source: "mod-staging-directory"
