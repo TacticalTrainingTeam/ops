@@ -1,6 +1,6 @@
 {{ $nonce := uuidv4 -}}
 {{ $nonceAttribute := print "nonce=" (quote $nonce) -}}
-{{ $csp := printf "default-src 'none'; img-src 'self' data: https://tacticalteam.de https://wiki.tacticalteam.de; object-src 'none'; base-uri 'none'; script-src 'nonce-%s' 'self'; style-src 'nonce-%s' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; frame-ancestors 'self'; form-action 'self';" $nonce $nonce -}}
+{{ $csp := printf "default-src 'none'; img-src 'self' data: https://tacticalteam.de https://wiki.tacticalteam.de; object-src 'none'; base-uri 'none'; script-src 'nonce-%s' 'self' 'sha256-ZswfTY7H35rbv8WC7NXBoiC7WNu86vSzCDChNWwZZDM='; style-src 'nonce-%s' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; frame-ancestors 'self'; form-action 'self';" $nonce $nonce -}}
 {{/* To disable the Content-Security-Policy, set this to false */}}{{ $enableCsp := true -}}
 {{ if $enableCsp -}}
 {{- .RespHeader.Set "Content-Security-Policy" $csp -}}
