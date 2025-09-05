@@ -8,6 +8,7 @@ services:
       - "no-new-privileges:true"
     volumes:
       - "arma3sync-repo:/srv:ro"
+      - "./browse.html:/etc/caddy/templates/browse.html:ro"
       # Long syntax is needed because of https://github.com/docker/compose/issues/12993
       - type: "volume"
         source: "mod-staging-directory"
@@ -56,7 +57,9 @@ configs:
     content: |
       :80 {
         root * /srv
-        file_server browse
+        file_server browse {
+          template /etc/caddy/templates/browse.html
+        }
       }
 networks:
   proxy:

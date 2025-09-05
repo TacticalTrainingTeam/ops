@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mods – Tactical Training Team</title>
+    <link rel="icon" type="image/png" href="https://tacticalteam.de/assets/favicon/favicon.ico">
+    <style>
+        /* Import fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&family=Ubuntu&display=swap');
+
+        body {
+            margin: 0;
+            font-family: 'Ubuntu', sans-serif;
+            background-color: #40403e;
+            color: #f5f5f5;
+        }
+
+        header {
+            background-color: #a10f2b; /* Accent color */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            padding: 1rem 2rem;
+        }
+
+        header img {
+            height: 35px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-family: 'Rubik', sans-serif;
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            color: #f5f3f2;
+        }
+
+        main {
+            padding: 2rem;
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #2f2f2d;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+        }
+
+        th {
+            text-align: left;
+            background-color: #333330;
+            font-family: 'Rubik', sans-serif;
+            padding: 0.8rem;
+            font-size: 1rem;
+            color: #ffffff;
+        }
+
+        td {
+            padding: 0.8rem;
+            font-size: 0.95rem;
+            border-bottom: 1px solid #50504e;
+        }
+
+        tr:hover {
+            background-color: #50504e;
+        }
+
+        a {
+            color: #a10f2b; /* Accent color for links */
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <img src="https://wiki.tacticalteam.de/bilder/ttt_logo.png" alt="Tactical Training Team Logo">
+    <h1>Mods des Tactical Training Team</h1>
+</header>
+<main>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Größe</th>
+            <th>Zuletzt geändert am</th>
+        </tr>
+        {{- range .Entries }}
+        <tr>
+            <td>
+                <a href="{{ .Name }}">{{ if .IsDir }}📁 {{ else }}📄 {{ end }}{{ .Name }}</a>
+            </td>
+            <td>{{ if .IsDir }}—{{ else }}{{ .Size.String }}{{ end }}</td>
+            <td>{{ .ModTime.Format "2006-01-02 15:04:05" }}</td>
+        </tr>
+        {{- end }}
+    </table>
+</main>
+<footer>
+    &copy; {{ now.Year }} Tactical Training Team
+</footer>
+</body>
+</html>
