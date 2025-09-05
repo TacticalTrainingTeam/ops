@@ -1,6 +1,6 @@
 {{ $nonce := uuidv4 -}}
 {{ $nonceAttribute := print "nonce=" (quote $nonce) -}}
-{{ $csp := printf "default-src 'none'; img-src 'self' data: https://tacticalteam.de https://wiki.tacticalteam.de; object-src 'none'; base-uri 'none'; script-src 'nonce-%s'; style-src 'nonce-%s' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; frame-ancestors 'self'; form-action 'self';" $nonce $nonce -}}
+{{ $csp := printf "default-src 'none'; img-src 'self' data: https://tacticalteam.de https://wiki.tacticalteam.de; object-src 'none'; base-uri 'none'; script-src 'nonce-%s' 'self'; style-src 'nonce-%s' https://fonts.googleapis.com; font-src https://fonts.gstatic.com data:; frame-ancestors 'self'; form-action 'self';" $nonce $nonce -}}
 {{/* To disable the Content-Security-Policy, set this to false */}}{{ $enableCsp := true -}}
 {{ if $enableCsp -}}
 {{- .RespHeader.Set "Content-Security-Policy" $csp -}}
@@ -1217,7 +1217,7 @@
     </a>
 </footer>
 
-<script {{ $nonceAttribute }}>
+<script {{ $nonceAttribute }} data-cfasync="false">
     // @license magnet:?xt=urn:btih:8e4f440f4c65981c5bf93c76d35135ba5064d8b7&dn=apache-2.0.txt Apache-2.0
     const filterEl = document.getElementById('filter');
     filterEl?.focus({ preventScroll: true });
