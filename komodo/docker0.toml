@@ -70,6 +70,26 @@ SERVER_PASSWORD=[[KOPIA_SERVER_PASSWORD]]
 REPOSITORY_PASSWORD=[[KOPIA_REPOSITORY_PASSWORD]]
 """
 
+
+##
+
+[[stack]]
+name = "missions"
+[stack.config]
+server = "local"
+run_build = true
+poll_for_updates = true
+destroy_before_deploy = true
+linked_repo = "ops"
+run_directory = "docker/missions"
+environment = """
+TRAEFIK_DOMAINNAME_1=[[TRAEFIK_DOMAINNAME_1]]
+SMB_USERNAME=[[COMMON_SMB_USERNAME]]
+SMB_PASSWORD=[[COMMON_SMB_PASSWORD]]
+SMB_HOST=[[COMMON_SMB_HOST]]
+SMB_PATH=[[MISSIONS_SMB_PATH]]
+"""
+
 ##
 
 [[stack]]
