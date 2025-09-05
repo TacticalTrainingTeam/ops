@@ -2,117 +2,293 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Mods – Tactical Training Team</title>
-    <link rel="icon" type="image/png" href="https://tacticalteam.de/assets/favicon/favicon.ico">
-    <style>
-        /* Import fonts */
-        @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@500&family=Ubuntu&display=swap');
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.Title}}</title>
+    <link rel="icon" href="https://tacticalteam.de/assets/favicon/favicon.ico">
 
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@700&family=Ubuntu&display=swap" rel="stylesheet">
+
+    <style>
+        /* Global Styles */
         body {
             margin: 0;
-            font-family: 'Ubuntu', sans-serif;
             background-color: #40403e;
-            color: #f5f5f5;
-        }
-
-        header {
-            background-color: #a10f2b; /* Accent color */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            padding: 1rem 2rem;
-        }
-
-        header img {
-            height: 35px;
-        }
-
-        header h1 {
-            margin: 0;
-            font-family: 'Rubik', sans-serif;
-            font-size: 1.8rem;
-            letter-spacing: 1px;
-            color: #f5f3f2;
-        }
-
-        main {
-            padding: 2rem;
-            max-width: 1000px;
-            margin: auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: #2f2f2d;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-        }
-
-        th {
-            text-align: left;
-            background-color: #333330;
-            font-family: 'Rubik', sans-serif;
-            padding: 0.8rem;
-            font-size: 1rem;
             color: #ffffff;
-        }
-
-        td {
-            padding: 0.8rem;
-            font-size: 0.95rem;
-            border-bottom: 1px solid #50504e;
-        }
-
-        tr:hover {
-            background-color: #50504e;
+            font-family: 'Ubuntu', sans-serif;
         }
 
         a {
-            color: #a10f2b; /* Accent color for links */
+            color: #a10f2b;
             text-decoration: none;
-            font-weight: 500;
         }
 
         a:hover {
             text-decoration: underline;
         }
 
-        footer {
-            margin-top: 2rem;
+        header {
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #40403e;
+            border-bottom: 2px solid #a10f2b;
+        }
+
+        header img {
+            height: 50px;
+            margin-right: 1rem;
+        }
+
+        header h1 {
+            font-family: 'Raleway', sans-serif;
+            font-size: 1.8rem;
+            margin: 0;
+            color: #a10f2b;
+        }
+
+        main {
+            padding: 2rem;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        /* Search */
+        .search {
+            margin-bottom: 1.5rem;
+        }
+
+        .search input {
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 1rem;
+            border: 1px solid #a10f2b;
+            border-radius: 4px;
+            background-color: #40403e;
+            color: #fff;
+        }
+
+        /* Table View */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 0.75rem;
+        }
+
+        th {
+            border-bottom: 2px solid #a10f2b;
+            font-family: 'Raleway', sans-serif;
+            color: #a10f2b;
+        }
+
+        tr:nth-child(even) {
+            background-color: #4a4a48;
+        }
+
+        tr:hover {
+            background-color: #5a5a57;
+        }
+
+        /* Grid View */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+        }
+
+        .grid-item {
+            background-color: #4a4a48;
+            padding: 1rem;
+            border-radius: 6px;
             text-align: center;
-            font-size: 0.8rem;
+            transition: background 0.3s;
+        }
+
+        .grid-item:hover {
+            background-color: #5a4a48;
+        }
+
+        .grid-item a {
+            color: #a10f2b;
+            word-break: break-word;
+        }
+
+        .grid-item .size, .grid-item .modtime {
+            display: block;
+            font-size: 0.85rem;
             color: #ccc;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.9rem;
+            color: #cccccc;
+        }
+
+        /* Toggle buttons */
+        .view-toggle {
+            margin-bottom: 1rem;
+        }
+
+        .view-toggle button {
+            background-color: #40403e;
+            border: 1px solid #a10f2b;
+            color: #a10f2b;
+            padding: 0.5rem 1rem;
+            margin-right: 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: 'Raleway', sans-serif;
+        }
+
+        .view-toggle button.active {
+            background-color: #a10f2b;
+            color: #ffffff;
         }
     </style>
 </head>
 <body>
 <header>
-    <img src="https://wiki.tacticalteam.de/bilder/ttt_logo.png" alt="Tactical Training Team Logo">
-    <h1>Mods des Tactical Training Team</h1>
+    <img src="https://wiki.tacticalteam.de/bilder/ttt_logo.png" alt="Logo">
+    <h1>{{.Title}}</h1>
 </header>
+
 <main>
-    <table>
+    <!-- Search Box -->
+    <div class="search">
+        <input type="text" id="searchInput" placeholder="Search files..." onkeyup="filterFiles()">
+    </div>
+
+    <!-- View Toggle -->
+    <div class="view-toggle">
+        <button id="tableViewBtn" class="active" onclick="showTableView()">Table View</button>
+        <button id="gridViewBtn" onclick="showGridView()">Grid View</button>
+    </div>
+
+    <!-- Table View -->
+    <table id="fileTable">
+        <thead>
         <tr>
-            <th>Name</th>
-            <th>Größe</th>
-            <th>Zuletzt geändert am</th>
+            <th onclick="sortTable(0)">Name</th>
+            <th onclick="sortTable(1)">Size</th>
+            <th onclick="sortTable(2)">Modified</th>
         </tr>
-        {{- range .Items }}
+        </thead>
+        <tbody>
+        {{range .Items}}
         <tr>
-            <td>
-                <a href="{{ .Name }}">{{ if .IsDir }}📁 {{ else }}📄 {{ end }}{{ .Name }}</a>
-            </td>
-            <td>{{ if .IsDir }}—{{ else }}{{ .Size.String }}{{ end }}</td>
-            <td>{{ .ModTime.Format "2006-01-02 15:04:05" }}</td>
+            <td><a href="{{.URL}}">{{.Name}}</a></td>
+            <td>{{.Size}}</td>
+            <td>{{.ModTime}}</td>
         </tr>
-        {{- end }}
+        {{end}}
+        </tbody>
     </table>
+
+    <!-- Grid View -->
+    <div class="grid" id="fileGrid" style="display:none;">
+        {{range .Items}}
+        <div class="grid-item">
+            <a href="{{.URL}}">{{.Name}}</a>
+            <span class="size">{{.Size}}</span>
+            <span class="modtime">{{.ModTime}}</span>
+        </div>
+        {{end}}
+    </div>
 </main>
+
 <footer>
-    &copy; {{ now.Year }} Tactical Training Team
+    &copy; {{now.Year}} Tactical Training Team
 </footer>
+
+<script>
+    // Toggle Views
+    const tableViewBtn = document.getElementById('tableViewBtn');
+    const gridViewBtn = document.getElementById('gridViewBtn');
+    const fileTable = document.getElementById('fileTable');
+    const fileGrid = document.getElementById('fileGrid');
+
+    function showTableView() {
+        tableViewBtn.classList.add('active');
+        gridViewBtn.classList.remove('active');
+        fileTable.style.display = '';
+        fileGrid.style.display = 'none';
+    }
+
+    function showGridView() {
+        gridViewBtn.classList.add('active');
+        tableViewBtn.classList.remove('active');
+        fileGrid.style.display = '';
+        fileTable.style.display = 'none';
+    }
+
+    // Filter function
+    function filterFiles() {
+        const filter = document.getElementById('searchInput').value.toLowerCase();
+        const tr = fileTable.getElementsByTagName("tr");
+        for (let i = 1; i < tr.length; i++) {
+            const td = tr[i].getElementsByTagName("td")[0];
+            if (td) {
+                const txtValue = td.textContent || td.innerText;
+                tr[i].style.display = txtValue.toLowerCase().includes(filter) ? "" : "none";
+            }
+        }
+
+        // Grid filter
+        const items = fileGrid.getElementsByClassName("grid-item");
+        Array.from(items).forEach(item => {
+            const name = item.getElementsByTagName("a")[0].textContent.toLowerCase();
+            item.style.display = name.includes(filter) ? "" : "none";
+        });
+    }
+
+    // Sorting function (simple)
+    function sortTable(n) {
+        let switching = true;
+        let dir = "asc";
+        while (switching) {
+            switching = false;
+            const rows = fileTable.rows;
+            for (let i = 1; i < rows.length - 1; i++) {
+                let shouldSwitch = false;
+                const x = rows[i].getElementsByTagName("TD")[n];
+                const y = rows[i + 1].getElementsByTagName("TD")[n];
+                let xContent = x.textContent || x.innerText;
+                let yContent = y.textContent || y.innerText;
+                if (n === 1) { // size column
+                    xContent = parseInt(xContent) || 0;
+                    yContent = parseInt(yContent) || 0;
+                } else if (n === 2) { // date column
+                    xContent = new Date(xContent);
+                    yContent = new Date(yContent);
+                }
+                if (dir === "asc") {
+                    if (xContent > yContent) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir === "desc") {
+                    if (xContent < yContent) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+            } else if (dir === "asc") {
+                dir = "desc";
+                switching = true;
+            }
+        }
+    }
+</script>
 </body>
 </html>
