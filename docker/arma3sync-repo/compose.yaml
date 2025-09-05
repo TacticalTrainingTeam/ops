@@ -57,8 +57,8 @@ configs:
     content: |
       :80 {
         root * /srv
-        file_server browse {
-          template /etc/caddy/templates/browse.html
+        file_server {
+          browse /etc/caddy/templates/browse.html
         }
       }
 networks:
