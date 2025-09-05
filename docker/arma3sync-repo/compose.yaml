@@ -7,7 +7,7 @@ services:
     security_opt:
       - "no-new-privileges:true"
     volumes:
-      - "arma3sync-repo:/usr/share/caddy:ro"
+      - "arma3sync-repo:/srv:ro"
       # Long syntax is needed because of https://github.com/docker/compose/issues/12993
       - type: "volume"
         source: "mod-staging-directory"
@@ -21,9 +21,9 @@ services:
         read_only: true
         volume:
           nocopy: true
-#    configs:
-#      - source: "nginx-config"
-#        target: "/etc/nginx/conf.d/default.conf"
+    configs:
+      - source: "caddy-config"
+        target: "/etc/caddy/Caddyfile"
     networks:
       - "proxy"
     labels:
@@ -51,15 +51,13 @@ volumes:
       type: "cifs"
       o: "username=${SMB_USERNAME:?error},password=${SMB_PASSWORD:?error},rw,noperm,file_mode=0777,dir_mode=0777"
       device: "//${SMB_HOST:?error}/${SMB_PATH_LOCAL_MODS:?error}"
-#configs:
-#  nginx-config:
-#    content: |
-#      server {
-#        location / {
-#          root /usr/share/nginx/html;
-#          autoindex on;
-#        }
-#      }
+configs:
+  caddy-config:
+    content: |
+      :80 {
+        root * /srv
+        file_server browse
+      }
 networks:
   proxy:
     external: true
