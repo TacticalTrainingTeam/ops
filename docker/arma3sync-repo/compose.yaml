@@ -30,7 +30,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.arma3sync-repo.entrypoints: "websecure-internal,websecure-external"
-      traefik.http.routers.arma3sync-repo.rule: "Host(`mods-test.${TRAEFIK_DOMAINNAME_1:?error}`)"
+      traefik.http.routers.arma3sync-repo.rule: "Host(`mods.${TRAEFIK_DOMAINNAME_1:?error}`)"
       traefik.http.routers.arma3sync-repo.service: "arma3sync-repo"
       traefik.http.services.arma3sync-repo.loadbalancer.server.port: 80
 volumes:
