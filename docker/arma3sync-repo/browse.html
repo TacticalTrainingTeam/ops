@@ -423,6 +423,21 @@
             color: #d12b47;
         }
 
+        /* Grid view: match link colors to list view */
+        .grid .entry a {
+            color: #a10f2b;
+            text-decoration: none;
+        }
+        .grid .entry a:hover {
+            color: #c81b3a;
+        }
+        .grid .entry a:visited {
+            color: #7b0b20;
+        }
+        .grid .entry a:visited:hover {
+            color: #d12b47;
+        }
+
         th:first-child,
         td:first-child {
             width: 5%;
@@ -800,6 +815,14 @@
 
             td a:visited:hover {
                 color: #ffffff;
+            }
+
+            /* Grid view: match link colors to list view (dark mode) */
+            .grid .entry a {
+                color: #a10f2b;
+            }
+            .grid .entry a:visited {
+                color: #d12b47;
             }
 
             #search-icon {
