@@ -390,6 +390,31 @@
             letter-spacing: .5px;
         }
 
+        /* Integrated brand line inside header */
+        .brandline {
+            display: flex;
+            align-items: center;
+            gap: .5em;
+            padding-top: .5em;
+            padding-bottom: .5em;
+        }
+        .brand-link {
+            display: inline-flex;
+            align-items: center;
+            gap: .5em;
+            color: inherit;
+            text-decoration: none;
+        }
+        .brand-logo {
+            height: 28px;
+            width: auto;
+        }
+        .brand-name {
+            font-family: 'Raleway', system-ui, sans-serif;
+            font-weight: 600;
+            letter-spacing: .5px;
+        }
+
         /* Fonts */
         h1, h2, h3, h4, h5, h6 { font-family: 'Raleway', system-ui, sans-serif; }
 
@@ -480,9 +505,24 @@
             margin: 0;
         }
 
-        header,
         main {
             background-color: white;
+        }
+
+        /* Header accent background */
+        header {
+            background-color: #a10f2b;
+            color: #ffffff;
+        }
+        header .breadcrumbs,
+        header h1,
+        header h1 a,
+        header a {
+            color: #ffffff;
+        }
+        /* Improve link hover contrast on red header */
+        header h1 a:hover {
+            background: hsla(0, 0%, 100%, 0.1);
         }
 
         main {
@@ -747,7 +787,6 @@
                 background: hsla(0, 0%, 100%, 0.1);
             }
 
-            header,
             main,
             .grid .entry {
                 background-color: #2f2f2e;
@@ -817,16 +856,14 @@
     {{- end}}
 </head>
 <body>
-<div class="brandbar">
-    <div class="wrapper">
-        <a class="brand-link" href="https://tacticalteam.de/" target="_blank" rel="noopener">
-            <img class="brand-logo" src="https://wiki.tacticalteam.de/bilder/ttt_logo.png" alt="Tactical Training Team logo" />
-            <span class="brand-name">Tactical Training Team</span>
-        </a>
-    </div>
-</div>
 <header>
     <div class="wrapper">
+        <div class="brandline">
+            <a class="brand-link" href="https://tacticalteam.de/" target="_blank" rel="noopener">
+                <img class="brand-logo" src="https://wiki.tacticalteam.de/bilder/ttt_logo.png" alt="Tactical Training Team logo" />
+                <span class="brand-name">Mods des Tactical Training Team</span>
+            </a>
+        </div>
         <div class="breadcrumbs">Folder Path</div>
         <h1>
             {{range $i, $crumb := .Breadcrumbs}}<a href="{{html $crumb.Link}}">{{html $crumb.Text}}</a>{{if ne $i 0}}/{{end}}{{end}}
