@@ -7,7 +7,8 @@ services:
     security_opt:
       - "no-new-privileges:true"
     volumes:
-      - "missions:/srv:ro"
+      - "missions:/srv/mpmissions:ro"
+      - "missions-archive:/srv/mpmissions-archiv:ro"
     configs:
       - source: "caddy-config"
         target: "/etc/caddy/Caddyfile"
@@ -25,13 +26,21 @@ volumes:
     driver_opts:
       type: "cifs"
       o: "username=${SMB_USERNAME:?error},password=${SMB_PASSWORD:?error},rw,noperm,file_mode=0777,dir_mode=0777"
-      device: "//${SMB_HOST:?error}/${SMB_PATH:?error}"
+      device: "//${SMB_HOST:?error}/${SMB_PATH_MISSIONS:?error}"
+  missions-archive:
+    driver: "local"
+    driver_opts:
+      type: "cifs"
+      o: "username=${SMB_USERNAME:?error},password=${SMB_PASSWORD:?error},rw,noperm,file_mode=0777,dir_mode=0777"
+      device: "//${SMB_HOST:?error}/${SMB_PATH_MISSIONS_ARCHIVE:?error}"
 configs:
   caddy-config:
     content: |
       :80 {
         root * /srv
-        file_server
+        file_server {
+          browse /templates/browse.html
+        }
       }
 networks:
   proxy:
