@@ -82,6 +82,9 @@ poll_for_updates = true
 destroy_before_deploy = true
 linked_repo = "ops"
 run_directory = "docker/missions"
+config_files = [
+  { path = "browse.html", requires = "Redeploy" }
+]
 environment = """
 TRAEFIK_DOMAINNAME_1=[[TRAEFIK_DOMAINNAME_1]]
 SMB_USERNAME=[[COMMON_SMB_USERNAME]]
