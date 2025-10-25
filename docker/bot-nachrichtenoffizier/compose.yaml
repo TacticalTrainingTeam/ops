@@ -10,5 +10,3 @@ services:
       CLIENT_ID: "${CLIENT_ID:?error}"
       TIMEZONE: "Europe/Berlin"
       POST_CRON: "0 19 * * SUN"
-    volumes:
-      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}:/app/data:z"
