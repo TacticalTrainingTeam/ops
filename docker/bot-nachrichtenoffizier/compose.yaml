@@ -11,6 +11,6 @@ services:
       TIMEZONE: "Europe/Berlin"
       POST_CRON: "0 19 * * SUN"
     volumes:
-      - "bot-nachrichtenoffizier:/app/data"
+      - "data:/app/data"
 volumes:
-  bot-nachrichtenoffizier:
+  data:
