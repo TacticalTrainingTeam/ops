@@ -1,0 +1,15 @@
+services:
+  bot-nachrichtenoffizier:
+    build: "https://github.com/TacticalTrainingTeam/bot-nachrichtenoffizier.git"
+    container_name: "bot-nachrichtenoffizier"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    environment:
+      DISCORD_TOKEN: "${DISCORD_TOKEN:?error}"
+      CLIENT_ID: "${CLIENT_ID:?error}"
+      DB_FILE: "/data/botdata.sqlite"
+      TIMEZONE: "Europe/Berlin"
+      POST_CRON: "0 19 * * SUN"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}:/data:z"
