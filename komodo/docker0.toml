@@ -40,6 +40,7 @@ run_build = true
 poll_for_updates = true
 destroy_before_deploy = true
 linked_repo = "ops"
+webhook_force_deploy = true
 run_directory = "docker/bot-nachrichtenoffizier"
 environment = """
 DOCKER_DATA_DIR=[[DOCKER_DATA_DIR]]
@@ -86,7 +87,6 @@ SERVER_USERNAME=[[KOPIA_SERVER_USERNAME]]
 SERVER_PASSWORD=[[KOPIA_SERVER_PASSWORD]]
 REPOSITORY_PASSWORD=[[KOPIA_REPOSITORY_PASSWORD]]
 """
-
 
 ##
 
