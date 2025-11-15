@@ -1,0 +1,59 @@
+services:
+  matomo:
+    image: "matomo:5.5.2-apache"
+    container_name: "matomo"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    environment:
+      MATOMO_DATABASE_HOST: "db"
+      MATOMO_DATABASE_ADAPTER: "mysql"
+      MATOMO_DATABASE_TABLES_PREFIX: "matomo_"
+      MATOMO_DATABASE_USERNAME: "${MATOMO_DATABASE_USERNAME:?error}"
+      MATOMO_DATABASE_PASSWORD: "${MATOMO_DATABASE_PASSWORD:?error}"
+      MATOMO_DATABASE_DBNAME: "${MATOMO_DATABASE_DBNAME:?error}"
+      TZ: "Europe/Berlin"
+    networks:
+      default:
+      proxy:
+    labels:
+      traefik.enable: true
+      traefik.http.routers.matomo.entrypoints: "websecure-internal,websecure-external"
+      traefik.http.routers.matomo.rule: "Host(`analytics.${TRAEFIK_DOMAINNAME_1:?error}`)"
+      traefik.http.routers.matomo.service: "matomo"
+      traefik.http.services.matomo.loadbalancer.server.port: 80
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/config:/var/www/html:z"
+    depends_on:
+      db:
+        condition: "service_healthy"
+  db:
+    image: "mariadb:lts"
+    container_name: "matomo-db"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    command:
+      - "--max-allowed-packet=64MB"
+    environment:
+      MARIADB_AUTO_UPGRADE: "1"
+      MARIADB_DISABLE_UPGRADE_BACKUP: "1"
+      MARIADB_INITDB_SKIP_TZINFO: "1"
+      MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD:?error}"
+      MARIADB_DATABASE: "${MATOMO_DATABASE_DBNAME:?error}"
+      MARIADB_USER: "${MATOMO_DATABASE_USERNAME:?error}"
+      MARIADB_PASSWORD: "${MATOMO_DATABASE_PASSWORD:?error}"
+      TZ: "Europe/Berlin"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db:/var/lib/mysql:z"
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      start_period: "10s"
+      interval: "10s"
+      timeout: "5s"
+      retries: 3
+networks:
+  default: {}
+  proxy:
+    external: true
+    name: "${TRAEFIK_NETWORK_NAME:-proxy}"
