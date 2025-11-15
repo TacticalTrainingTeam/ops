@@ -150,6 +150,25 @@ ENTRYPOINT_EXTERNAL_IPV6=[[TRAEFIK_ENTRYPOINT_EXTERNAL_IPV6]]
 
 ##
 
+[[stack]]
+name = "matomo"
+[stack.config]
+server = "local"
+poll_for_updates = true
+destroy_before_deploy = true
+linked_repo = "ops"
+run_directory = "docker/matomo"
+environment = """
+DOCKER_DATA_DIR=[[DOCKER_DATA_DIR]]
+TRAEFIK_DOMAINNAME_1=[[TRAEFIK_DOMAINNAME_1]]
+MATOMO_DATABASE_USERNAME=[[MATOMO_DATABASE_USERNAME]]
+MATOMO_DATABASE_PASSWORD=[[MATOMO_DATABASE_PASSWORD]]
+MATOMO_DATABASE_DBNAME=[[MATOMO_DATABASE_DBNAME]]
+MARIADB_ROOT_PASSWORD=[[MARIADB_ROOT_PASSWORD]]
+"""
+
+##
+
 [[repo]]
 name = "ops"
 [repo.config]
