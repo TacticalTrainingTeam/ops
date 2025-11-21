@@ -68,7 +68,7 @@ services:
       DEFAULT_CLEANUP_TIME: "8640" # Cleanup after 7 days
       DB01_TYPE: "mariadb"
       DB01_HOST: "db"
-      DB01_NAME: "${MATOMO_DATABASE_DBNAME:-matomo}"
+      DB01_NAME: "ALL"
       DB01_USER: "${MATOMO_DATABASE_USERNAME:?error}"
       DB01_PASS: "${MATOMO_DATABASE_PASSWORD:?error}"
 networks:
