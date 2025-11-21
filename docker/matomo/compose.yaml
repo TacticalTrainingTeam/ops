@@ -11,25 +11,25 @@ services:
       MATOMO_DATABASE_TABLES_PREFIX: "matomo_"
       MATOMO_DATABASE_USERNAME: "${MATOMO_DATABASE_USERNAME:?error}"
       MATOMO_DATABASE_PASSWORD: "${MATOMO_DATABASE_PASSWORD:?error}"
-      MATOMO_DATABASE_DBNAME: "${MATOMO_DATABASE_DBNAME:?error}"
+      MATOMO_DATABASE_DBNAME: "${MATOMO_DATABASE_DBNAME:-matomo}"
       TZ: "Europe/Berlin"
     networks:
       default:
       proxy:
     labels:
       traefik.enable: true
-      traefik.http.routers.matomo.entrypoints: "websecure-internal,websecure-external"
+      traefik.http.routers.matomo.entrypoints: "websecure-internal"
       traefik.http.routers.matomo.rule: "Host(`analytics.${TRAEFIK_DOMAINNAME_1:?error}`)"
       traefik.http.routers.matomo.service: "matomo"
       traefik.http.services.matomo.loadbalancer.server.port: 80
     volumes:
-      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/config:/var/www/html:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/matomo:/var/www/html:z"
     depends_on:
       db:
         condition: "service_healthy"
   db:
     image: "mariadb:lts"
-    container_name: "matomo-db"
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-db"
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
@@ -40,7 +40,7 @@ services:
       MARIADB_DISABLE_UPGRADE_BACKUP: "1"
       MARIADB_INITDB_SKIP_TZINFO: "1"
       MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD:?error}"
-      MARIADB_DATABASE: "${MATOMO_DATABASE_DBNAME:?error}"
+      MARIADB_DATABASE: "${MATOMO_DATABASE_DBNAME:-matomo}"
       MARIADB_USER: "${MATOMO_DATABASE_USERNAME:?error}"
       MARIADB_PASSWORD: "${MATOMO_DATABASE_PASSWORD:?error}"
       TZ: "Europe/Berlin"
@@ -52,6 +52,25 @@ services:
       interval: "10s"
       timeout: "5s"
       retries: 3
+  db-backup:
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
+    image: "tiredofit/db-backup:4.1.21"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db-backups:/backup:z"
+    environment:
+      TIMEZONE: "Europe/Berlin"
+      CONTAINER_NAME: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
+      CONTAINER_ENABLE_MONITORING: "FALSE"
+      DEFAULT_BACKUP_SCHEDULE: "0 2 * * *"
+      DEFAULT_CLEANUP_TIME: "8640" # Cleanup after 7 days
+      DB01_TYPE: "mariadb"
+      DB01_HOST: "db"
+      DB01_NAME: "${MATOMO_DATABASE_DBNAME:-matomo}"
+      DB01_USER: "${MATOMO_DATABASE_USERNAME:?error}"
+      DB01_PASS: "${MATOMO_DATABASE_PASSWORD:?error}"
 networks:
   default: {}
   proxy:
