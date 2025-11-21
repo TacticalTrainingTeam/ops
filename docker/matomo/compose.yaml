@@ -66,6 +66,7 @@ services:
       CONTAINER_ENABLE_MONITORING: "FALSE"
       DEFAULT_BACKUP_SCHEDULE: "0 2 * * *"
       DEFAULT_CLEANUP_TIME: "8640" # Cleanup after 7 days
+      DEBUG_MODE: "TRUE"
       DB01_TYPE: "mariadb"
       DB01_HOST: "db"
       DB01_PORT: "3306"
