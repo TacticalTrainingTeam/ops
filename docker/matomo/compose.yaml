@@ -18,7 +18,7 @@ services:
       proxy:
     labels:
       traefik.enable: true
-      traefik.http.routers.matomo.entrypoints: "websecure-internal"
+      traefik.http.routers.matomo.entrypoints: "websecure-internal,websecure-external"
       traefik.http.routers.matomo.rule: "Host(`analytics.${TRAEFIK_DOMAINNAME_1:?error}`)"
       traefik.http.routers.matomo.service: "matomo"
       traefik.http.services.matomo.loadbalancer.server.port: 80
