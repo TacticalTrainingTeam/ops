@@ -7,6 +7,24 @@ enabled = true
 ##
 
 [[stack]]
+name = "archiv"
+[stack.config]
+server = "local"
+poll_for_updates = true
+destroy_before_deploy = true
+linked_repo = "ops"
+run_directory = "docker/archiv"
+environment = """
+DOCKER_DATA_DIR=[[DOCKER_DATA_DIR]]
+TRAEFIK_DOMAINNAME_1=[[TRAEFIK_DOMAINNAME_1]]
+DATABASE_USERNAME=[[ARCHIV_DATABASE_USERNAME]]
+DATABASE_PASSWORD=[[ARCHIV_DATABASE_PASSWORD]]
+DATABASE_ROOT_PASSWORD=[[ARCHIV_DATABASE_ROOT_PASSWORD]]
+"""
+
+##
+
+[[stack]]
 name = "arma3sync-repo"
 [stack.config]
 server = "local"
