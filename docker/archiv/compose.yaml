@@ -1,5 +1,5 @@
 services:
-  matomo:
+  drupal:
     image: "drupal:7.103"
     container_name: "${COMPOSE_PROJECT_NAME:?error}-drupal"
     restart: "unless-stopped"
