@@ -1,6 +1,6 @@
 services:
   drupal:
-    image: "drupal:7.103-php8.2-apache"
+    image: "php:7.3.33-apache"
     container_name: "${COMPOSE_PROJECT_NAME:?error}-drupal"
     restart: "unless-stopped"
     security_opt:
@@ -17,7 +17,7 @@ services:
       traefik.http.routers.archiv.service: "archiv"
       traefik.http.services.archiv.loadbalancer.server.port: 80
     volumes:
-      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/sites:/var/www/html/sites:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/html:/var/www/html:z"
     depends_on:
       db:
         condition: "service_healthy"
