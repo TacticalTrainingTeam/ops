@@ -40,9 +40,9 @@ services:
       MARIADB_DISABLE_UPGRADE_BACKUP: "1"
       MARIADB_INITDB_SKIP_TZINFO: "1"
       MARIADB_ROOT_PASSWORD: "${MARIADB_ROOT_PASSWORD:?error}"
-      MARIADB_DATABASE: "${MATOMO_DATABASE_DBNAME:-matomo}"
-      MARIADB_USER: "${MATOMO_DATABASE_USERNAME:?error}"
-      MARIADB_PASSWORD: "${MATOMO_DATABASE_PASSWORD:?error}"
+      MARIADB_DATABASE: "${DATABASE_DBNAME:-matomo}"
+      MARIADB_USER: "${DATABASE_USERNAME:?error}"
+      MARIADB_PASSWORD: "${DATABASE_PASSWORD:?error}"
       TZ: "Europe/Berlin"
     volumes:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db:/var/lib/mysql:z"
@@ -68,9 +68,9 @@ services:
       DEFAULT_CLEANUP_TIME: "8640" # Cleanup after 7 days
       DB01_TYPE: "mariadb"
       DB01_HOST: "db"
-      DB01_NAME: "${MATOMO_DATABASE_DBNAME:-matomo}"
-      DB01_USER: "${MATOMO_DATABASE_USERNAME:?error}"
-      DB01_PASS: "${MATOMO_DATABASE_PASSWORD:?error}"
+      DB01_NAME: "${DATABASE_DBNAME:-matomo}"
+      DB01_USER: "${DATABASE_USERNAME:?error}"
+      DB01_PASS: "${DATABASE_PASSWORD:?error}"
 networks:
   default: {}
   proxy:
