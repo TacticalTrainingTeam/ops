@@ -1,6 +1,6 @@
 services:
   drupal:
-    image: "drupal:7.103"
+    image: "drupal:7.103-php8.2-apache"
     container_name: "${COMPOSE_PROJECT_NAME:?error}-drupal"
     restart: "unless-stopped"
     security_opt:
