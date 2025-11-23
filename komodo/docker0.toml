@@ -10,10 +10,14 @@ enabled = true
 name = "archiv"
 [stack.config]
 server = "local"
+run_build = true
 poll_for_updates = true
 destroy_before_deploy = true
 linked_repo = "ops"
 run_directory = "docker/archiv"
+config_files = [
+  { path = "Dockerfile", services = ["drupal"], requires = "Redeploy" }
+]
 environment = """
 DOCKER_DATA_DIR=[[DOCKER_DATA_DIR]]
 TRAEFIK_DOMAINNAME_1=[[TRAEFIK_DOMAINNAME_1]]
