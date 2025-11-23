@@ -10,4 +10,4 @@ RUN a2enmod rewrite
 ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 # Drupal 7 PHP Requirements https://www.drupal.org/docs/7/system-requirements/php-requirements-for-drupal-7
-RUN install-php-extensions mysqli pdo_mysql gd imagick
+RUN install-php-extensions mysqli pdo_mysql gd imagick opcache
