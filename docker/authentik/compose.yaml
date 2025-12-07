@@ -11,7 +11,7 @@ services:
         condition: "service_healthy"
     labels:
       traefik.enable: true
-      traefik.http.routers.authentik.entrypoints: "websecure-internal"
+      traefik.http.routers.authentik.entrypoints: "websecure-internal,websecure-external"
       traefik.http.routers.authentik.rule: "Host(`auth.${TRAEFIK_DOMAINNAME_1:?error}`)"
       traefik.http.routers.authentik.service: "authentik"
       traefik.http.services.authentik.loadbalancer.server.port: 9000
