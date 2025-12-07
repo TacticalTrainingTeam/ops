@@ -14,7 +14,7 @@ services:
       traefik.http.routers.authentik.entrypoints: "websecure-internal"
       traefik.http.routers.authentik.rule: "Host(`auth.${TRAEFIK_DOMAINNAME_1:?error}`)"
       traefik.http.routers.authentik.service: "authentik"
-      traefik.http.services.authentik.loadbalancer.server.port: 9443
+      traefik.http.services.authentik.loadbalancer.server.port: 9000
     networks:
       - "default"
       - "proxy"
