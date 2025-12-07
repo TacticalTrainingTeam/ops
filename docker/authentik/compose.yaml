@@ -1,0 +1,108 @@
+services:
+  server:
+    image: "ghcr.io/goauthentik/server:2025.10.2"
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-server"
+    command: "server"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    depends_on:
+      db:
+        condition: "service_healthy"
+    labels:
+      traefik.enable: true
+      traefik.http.routers.authentik.entrypoints: "websecure-internal"
+      traefik.http.routers.authentik.rule: "Host(`auth.${TRAEFIK_DOMAINNAME_1:?error}`)"
+      traefik.http.routers.authentik.service: "authentik"
+      traefik.http.services.authentik.loadbalancer.server.port: 9443
+    networks:
+      - "default"
+      - "proxy"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/media:/media:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/templates:/templates:z"
+    environment:
+      AUTHENTIK_POSTGRESQL__HOST: "db"
+      AUTHENTIK_POSTGRESQL__NAME: "${DATABASE_NAME:-authentik}"
+      AUTHENTIK_POSTGRESQL__USER: "${DATABASE_USERNAME:?error}"
+      AUTHENTIK_POSTGRESQL__PASSWORD: "${DATABASE_PASSWORD:?error}"
+      AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?error}"
+      AUTHENTIK_LOG_LEVEL: "${AUTHENTIK_LOG_LEVEL:-info}"
+      AUTHENTIK_EMAIL__HOST: "${AUTHENTIK_EMAIL_HOST:?error}"
+      AUTHENTIK_EMAIL__PORT: 587
+      AUTHENTIK_EMAIL__USERNAME: "${AUTHENTIK_EMAIL_USERNAME:?error}"
+      AUTHENTIK_EMAIL__PASSWORD: "${AUTHENTIK_EMAIL_PASSWORD:?error}"
+      AUTHENTIK_EMAIL__USE_SSL: true
+      AUTHENTIK_EMAIL__FROM: "${AUTHENTIK_EMAIL_FROM:?error}"
+
+  worker:
+    image: "ghcr.io/goauthentik/server:2025.10.2"
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-worker"
+    command: "worker"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    depends_on:
+      db:
+        condition: "service_healthy"
+    user: "root"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/media:/media:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/templates:/templates:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/certs:/certs:z"
+    environment:
+      AUTHENTIK_POSTGRESQL__HOST: "db"
+      AUTHENTIK_POSTGRESQL__NAME: "${DATABASE_NAME:-authentik}"
+      AUTHENTIK_POSTGRESQL__USER: "${DATABASE_USERNAME:?error}"
+      AUTHENTIK_POSTGRESQL__PASSWORD: "${DATABASE_PASSWORD:?error}"
+      AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?error}"
+      AUTHENTIK_LOG_LEVEL: "${AUTHENTIK_LOG_LEVEL:-info}"
+      AUTHENTIK_EMAIL__HOST: "${AUTHENTIK_EMAIL_HOST:?error}"
+      AUTHENTIK_EMAIL__PORT: 587
+      AUTHENTIK_EMAIL__USERNAME: "${AUTHENTIK_EMAIL_USERNAME:?error}"
+      AUTHENTIK_EMAIL__PASSWORD: "${AUTHENTIK_EMAIL_PASSWORD:?error}"
+      AUTHENTIK_EMAIL__USE_SSL: true
+      AUTHENTIK_EMAIL__FROM: "${AUTHENTIK_EMAIL_FROM:?error}"
+
+  db:
+    image: "postgres:18.1-alpine"
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-db"
+    restart: "unless-stopped"
+    healthcheck:
+      interval: "30s"
+      retries: 5
+      start_period: "20s"
+      timeout: "5s"
+      test: ["CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db:/var/lib/postgresql/data:z"
+    environment:
+      POSTGRES_DB: "${DATABASE_NAME:-authentik}"
+      POSTGRES_USER: "${DATABASE_USERNAME:?error}"
+      POSTGRES_PASSWORD: "${DATABASE_PASSWORD:?error}"
+
+  db-backup:
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
+    image: "tiredofit/db-backup:4.1.21"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db-backups:/backup:z"
+    environment:
+      TIMEZONE: "Europe/Berlin"
+      CONTAINER_NAME: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
+      CONTAINER_ENABLE_MONITORING: "FALSE"
+      DEFAULT_BACKUP_SCHEDULE: "0 2 * * *"
+      DEFAULT_CLEANUP_TIME: "8640" # Cleanup after 7 days
+      DB01_TYPE: "pgsql"
+      DB01_HOST: "db"
+      DB01_NAME: "${DATABASE_NAME:-authentik}"
+      DB01_USER: "${DATABASE_USERNAME:?error}"
+      DB01_PASS: "${DATABASE_PASSWORD:?error}"
+
+networks:
+  default:
+  proxy:
+    external: true
+    name: "${TRAEFIK_NETWORK_NAME:-proxy}"

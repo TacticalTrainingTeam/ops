@@ -55,6 +55,28 @@ MOUNT_PATH_LOCAL_MODS=[[ARMA3SYNC_REPO_MOUNT_PATH_LOCAL_MODS]]
 ##
 
 [[stack]]
+name = "authentik"
+[stack.config]
+server = "local"
+poll_for_updates = true
+destroy_before_deploy = true
+linked_repo = "ops"
+run_directory = "docker/authentik"
+environment = """
+DOCKER_DATA_DIR=[[DOCKER_DATA_DIR]]
+TRAEFIK_DOMAINNAME_1=[[TRAEFIK_DOMAINNAME_1]]
+DATABASE_USERNAME=[[AUTHENTIK_DATABASE_USERNAME]]
+DATABASE_PASSWORD=[[AUTHENTIK_DATABASE_PASSWORD]]
+AUTHENTIK_SECRET_KEY=[[AUTHENTIK_SECRET_KEY]]
+AUTHENTIK_EMAIL_HOST=[[COMMON_SMTP_HOST]]
+AUTHENTIK_EMAIL_USERNAME=[[COMMON_SMTP_USER]]
+AUTHENTIK_EMAIL_PASSWORD=[[COMMON_STMP_PASSWORD]]
+AUTHENTIK_EMAIL_FROM=[[COMMON_SMTP_NO_REPLY_EMAIL]]
+"""
+
+##
+
+[[stack]]
 name = "bot-nachrichtenoffizier"
 [stack.config]
 server = "local"
