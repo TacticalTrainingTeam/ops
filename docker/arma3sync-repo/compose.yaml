@@ -1,7 +1,7 @@
 services:
   caddy:
     container_name: "arma3sync-repo"
-    image: "caddy:2.10"
+    image: "caddy:2.11"
     pull_policy: "always"
     restart: "unless-stopped"
     security_opt:
