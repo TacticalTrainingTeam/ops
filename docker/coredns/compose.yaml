@@ -10,8 +10,8 @@ services:
       - "[${IPV6:?error}]:53:53/udp"
     environment:
       - "DOMAINNAME={$DOMAINNAME?error}"
-      - "IPV4={$IPV4?error}"
-      - "IPV6={$IPV6?error}"
+      - "IPV4=${IPV4?error}"
+      - "IPV6=${IPV6?error}"
     configs:
       - source: corefile
         target: /etc/coredns/Corefile
