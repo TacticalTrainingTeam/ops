@@ -1,0 +1,40 @@
+services:
+  coredns:
+    image: coredns/coredns:1.13.2
+    container_name: coredns
+    command: -conf /etc/coredns/Corefile -dns.port 53
+    ports:
+      - "${IPV4:?error}:53:53"
+      - "${IPV4:?error}:53:53/udp"
+      - "[${IPV6:?error}]:53:53"
+      - "[${IPV6:?error}]:53:53/udp"
+    environment:
+      - "DOMAINNAME={$DOMAINNAME?error}"
+      - "IPV4={$IPV4?error}"
+      - "IPV6={$IPV6?error}"
+    configs:
+      - source: corefile
+        target: /etc/coredns/Corefile
+
+configs:
+  corefile:
+    content: |
+      {$DOMAINNAME} {
+        log
+        errors
+        
+        hosts {
+          {$IPV4} {$DOMAINNAME}
+          {$IPV4} *.{$DOMAINNAME}
+          {$IPV6} {$DOMAINNAME}
+          {$IPV6} *.{$DOMAINNAME}
+          fallthrough
+        }
+      }
+        
+      . {
+        log
+        errors
+        forward . 9.9.9.9 1.1.1.1 8.8.8.8
+      }
+

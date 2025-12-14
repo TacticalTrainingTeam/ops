@@ -23,9 +23,9 @@ services:
       - "${ENTRYPOINT_INTERNAL_IPV4:?error}:80:8080"
       - "${ENTRYPOINT_INTERNAL_IPV4:?error}:443:8443"
       - "${ENTRYPOINT_INTERNAL_IPV4:?error}:443:8443/udp" # http3
-      - "[${ENTRYPOINT_INTERNAL_IPV6:?error}]:80:80"
-      - "[${ENTRYPOINT_INTERNAL_IPV6:?error}]:443:443"
-      - "[${ENTRYPOINT_INTERNAL_IPV6:?error}]:443:443/udp" # http3
+      - "[${ENTRYPOINT_INTERNAL_IPV6:?error}]:80:8080"
+      - "[${ENTRYPOINT_INTERNAL_IPV6:?error}]:443:8443"
+      - "[${ENTRYPOINT_INTERNAL_IPV6:?error}]:443:8443/udp" # http3
       - "${ENTRYPOINT_EXTERNAL_IPV4:?error}:80:80"
       - "${ENTRYPOINT_EXTERNAL_IPV4:?error}:443:443"
       - "${ENTRYPOINT_EXTERNAL_IPV4:?error}:443:443/udp" # http3
@@ -52,7 +52,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.traefik.entrypoints=websecure-internal"
-      - "traefik.http.routers.traefik.rule=Host(`traefik.$DOMAINNAME_1`)"
+      - "traefik.http.routers.traefik.rule=Host(`traefik.${DOMAINNAME_1?error}`)"
       - "traefik.http.routers.traefik.service=api@internal"
 networks:
   default: {}
