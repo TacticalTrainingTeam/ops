@@ -11,6 +11,8 @@ services:
     configs:
       - source: corefile
         target: /etc/coredns/Corefile
+      - source: zone
+        target: /etc/coredns/zone
 
 configs:
   corefile:
@@ -18,14 +20,8 @@ configs:
       ${DOMAINNAME?error} {
         log
         errors
-        
-        hosts {
-          ${IPV4:?error} ${DOMAINNAME?error}
-          ${IPV4:?error} *.${DOMAINNAME?error}
-          ${IPV6:?error} ${DOMAINNAME?error}
-          ${IPV6:?error} *.${DOMAINNAME?error}
-          fallthrough
-        }
+      
+        file zone
       }
         
       . {
@@ -33,4 +29,13 @@ configs:
         errors
         forward . 9.9.9.9 1.1.1.1 8.8.8.8
       }
+  zone:
+    content: |
+      $ ORIGIN ${DOMAINNAME?error}.
+      $TTL 60
+      
+      @ IN A ${IPV4:?error}
+      @ IN AAAA ${IPV6:?error}
+      * IN A ${IPV4:?error}
+      * IN AAAA ${IPV6:?error}
 
