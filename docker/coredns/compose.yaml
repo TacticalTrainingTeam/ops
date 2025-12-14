@@ -13,8 +13,6 @@ services:
     configs:
       - source: "corefile"
         target: "/etc/coredns/Corefile"
-      - source: "zone"
-        target: "/etc/coredns/zone"
 
 configs:
   corefile:
@@ -23,7 +21,16 @@ configs:
         log
         errors
       
-        file /etc/coredns/zone ${DOMAINNAME?error}
+        template IN A {
+          answer "${DOMAINNAME?error} 60 IN A ${IPV4:?error}"
+          fallthrough
+        }
+      
+        template IN AAAA {
+          answer "${DOMAINNAME?error} 60 IN AAAA ${IPV6:?error}"
+          fallthrough
+        }        
+      
       }
         
       . {
@@ -31,26 +38,3 @@ configs:
         errors
         forward . 9.9.9.9 1.1.1.1 8.8.8.8
       }
-  zone:
-    content: |
-      $ORIGIN ${DOMAINNAME?error}.
-      $TTL 60
-      
-      @ IN SOA ns1.${DOMAINNAME?error}. technik.${DOMAINNAME?error}. (
-        2025121401 ; serial
-        3600       ; refresh
-        600        ; retry
-        1209600    ; expire
-        60         ; minimum
-      )
-      
-      @ IN NS ns1.${DOMAINNAME?error}.
-      
-      ns1 IN A ${IPV4:?error}
-      ns1 IN AAAA ${IPV6:?error}      
-      
-      @ IN A ${IPV4:?error}
-      @ IN AAAA ${IPV6:?error}
-      * IN A ${IPV4:?error}
-      * IN AAAA ${IPV6:?error}
-
