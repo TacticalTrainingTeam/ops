@@ -21,7 +21,7 @@ configs:
         log
         errors
       
-        file zone
+        file /etc/coredns/zone
       }
         
       . {
