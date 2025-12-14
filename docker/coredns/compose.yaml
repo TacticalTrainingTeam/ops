@@ -33,7 +33,7 @@ configs:
       }
   zone:
     content: |
-      $ ORIGIN ${DOMAINNAME?error}.
+      $ORIGIN ${DOMAINNAME?error}.
       $TTL 60
       
       @ IN SOA ns1.${DOMAINNAME?error}. technik.${DOMAINNAME?error}. (
