@@ -22,12 +22,12 @@ configs:
         errors
       
         template IN A {
-          answer "${DOMAINNAME?error} 60 IN A ${IPV4:?error}"
+          answer ".Name 60 IN A ${IPV4:?error}"
           fallthrough
         }
       
         template IN AAAA {
-          answer "${DOMAINNAME?error} 60 IN AAAA ${IPV6:?error}"
+          answer ".Name 60 IN AAAA ${IPV6:?error}"
           fallthrough
         }        
       
