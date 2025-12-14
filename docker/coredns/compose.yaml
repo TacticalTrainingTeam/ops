@@ -23,7 +23,7 @@ configs:
         log
         errors
       
-        file /etc/coredns/zone
+        file /etc/coredns/zone ${DOMAINNAME?error}
       }
         
       . {
