@@ -1,18 +1,20 @@
 services:
   coredns:
-    image: coredns/coredns:1.13.2
-    container_name: coredns
-    command: -conf /etc/coredns/Corefile -dns.port 53
+    image: "coredns/coredns:1.13.2"
+    container_name: "coredns"
+    command: "-conf /etc/coredns/Corefile -dns.port 53"
+    security_opt:
+      - "no-new-privileges:true"
     ports:
       - "${IPV4:?error}:53:53"
       - "${IPV4:?error}:53:53/udp"
       - "[${IPV6:?error}]:53:53"
       - "[${IPV6:?error}]:53:53/udp"
     configs:
-      - source: corefile
-        target: /etc/coredns/Corefile
-      - source: zone
-        target: /etc/coredns/zone
+      - source: "corefile"
+        target: "/etc/coredns/Corefile"
+      - source: "zone"
+        target: "/etc/coredns/zone"
 
 configs:
   corefile:
@@ -33,6 +35,19 @@ configs:
     content: |
       $ ORIGIN ${DOMAINNAME?error}.
       $TTL 60
+      
+      @ IN SOA ns1.${DOMAINNAME?error}. technik.${DOMAINNAME?error}. (
+        2025121401 ; serial
+        3600       ; refresh
+        600        ; retry
+        1209600    ; expire
+        60         ; minimum
+      )
+      
+      @ IN NS ns1.${DOMAINNAME?error}.
+      
+      ns1 IN A ${IPV4:?error}
+      ns1 IN AAAA ${IPV6:?error}      
       
       @ IN A ${IPV4:?error}
       @ IN AAAA ${IPV6:?error}
