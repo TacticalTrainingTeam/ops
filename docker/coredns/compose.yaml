@@ -19,15 +19,15 @@ services:
 configs:
   corefile:
     content: |
-      {$DOMAINNAME} {
+      ${DOMAINNAME?error} {
         log
         errors
         
         hosts {
-          {$IPV4} {$DOMAINNAME}
-          {$IPV4} *.{$DOMAINNAME}
-          {$IPV6} {$DOMAINNAME}
-          {$IPV6} *.{$DOMAINNAME}
+          ${IPV4:?error} ${DOMAINNAME?error}
+          ${IPV4:?error} *.${DOMAINNAME?error}
+          ${IPV6:?error} ${DOMAINNAME?error}
+          ${IPV6:?error} *.${DOMAINNAME?error}
           fallthrough
         }
       }
