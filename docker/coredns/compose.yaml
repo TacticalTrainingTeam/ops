@@ -21,13 +21,24 @@ configs:
         log
         errors
       
-        template IN A {
-          answer "{{.Name}} 60 IN A ${IPV4:?error}"
-        }
+        hosts {
+          ${IPV4:?error} backup.${DOMAINNAME?error}
+          ${IPV6:?error} backup.${DOMAINNAME?error}
       
-        template IN AAAA {
-          answer "{{.Name}} 60 IN AAAA ${IPV6:?error}"
-        }        
+          ${IPV4:?error} komodo.${DOMAINNAME?error}
+          ${IPV6:?error} komodo.${DOMAINNAME?error}
+      
+          ${IPV4:?error} docker0.${DOMAINNAME?error}
+          ${IPV6:?error} docker0.${DOMAINNAME?error}
+      
+          ${IPV4:?error} traefik.${DOMAINNAME?error}
+          ${IPV6:?error} traefik.${DOMAINNAME?error}
+      
+          ${IPV4:?error} archiv.${DOMAINNAME?error}
+          ${IPV6:?error} archiv.${DOMAINNAME?error}
+      
+          fallthrough
+        }
       
       }
         
