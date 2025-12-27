@@ -41,9 +41,6 @@ configs:
           ${IPV4:?error} files-legacy.${DOMAINNAME?error}
           ${IPV6:?error} files-legacy.${DOMAINNAME?error}
       
-          ${IPV4:?error} files.${DOMAINNAME?error}
-          ${IPV6:?error} files.${DOMAINNAME?error}
-      
           fallthrough
         }
       

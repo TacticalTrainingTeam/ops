@@ -22,7 +22,7 @@ services:
       proxy:
     labels:
       traefik.enable: true
-      traefik.http.routers.nextcloud.entrypoints: "websecure-internal"
+      traefik.http.routers.nextcloud.entrypoints: "websecure-internal,websecure-external"
       traefik.http.routers.nextcloud.rule: "Host(`files.${TRAEFIK_DOMAINNAME_1:?error}`)"
       traefik.http.routers.nextcloud.service: "nextcloud"
       traefik.http.services.nextcloud.loadbalancer.server.port: 80
