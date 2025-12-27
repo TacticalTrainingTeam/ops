@@ -195,6 +195,25 @@ SMB_PATH_MISSIONS_ARCHIVE=[[MISSIONS_SMB_PATH_MISSIONS_ARCHIVE]]
 ##
 
 [[stack]]
+name = "nextcloud"
+[stack.config]
+server = "local"
+poll_for_updates = true
+destroy_before_deploy = true
+linked_repo = "ops"
+run_directory = "docker/nextcloud"
+environment = """
+DOCKER_DATA_DIR=[[DOCKER_DATA_DIR]]
+TRAEFIK_DOMAINNAME_1=[[TRAEFIK_DOMAINNAME_1]]
+DATABASE_USERNAME=[[NEXTCLOUD_DATABASE_USERNAME]]
+DATABASE_PASSWORD=[[NEXTCLOUD_DATABASE_PASSWORD]]
+DATABASE_ROOT_PASSWORD=[[NEXTCLOUD_DATABASE_ROOT_PASSWORD]]
+TRUSTED_PROXIES=[[TRAEFIK_NETWORK_SUBNET]]
+"""
+
+##
+
+[[stack]]
 name = "ocap"
 [stack.config]
 server = "local"

@@ -1,0 +1,118 @@
+services:
+  app:
+    image: "nextcloud:32.0.3-apache"
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-app"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    environment:
+      TZ: "Europe/Berlin"
+      REDIS_HOST: "redis"
+      MYSQL_HOST: "db"
+      MYSQL_DATABASE: "${DATABASE_DBNAME:-nextcloud}"
+      MYSQL_USER: "${DATABASE_USERNAME:?error}"
+      MYSQL_PASSWORD: "${DATABASE_PASSWORD:?error}"
+      NEXTCLOUD_TRUSTED_DOMAINS: "files.${TRAEFIK_DOMAINNAME_1:?error}"
+      NEXTCLOUD_INIT_HTACCESS: "true"
+      APACHE_DISABLE_REWRITE_IP: "1"
+      TRUSTED_PROXIES: "${TRUSTED_PROXIES:?error}"
+      FORWARDED_FOR_HEADERS: "CF-Connecting-IP, X-Forwarded-For"
+    networks:
+      default:
+      proxy:
+    labels:
+      traefik.enable: true
+      traefik.http.routers.nextcloud.entrypoints: "websecure-internal"
+      traefik.http.routers.nextcloud.rule: "Host(`files.${TRAEFIK_DOMAINNAME_1:?error}`)"
+      traefik.http.routers.nextcloud.service: "nextcloud"
+      traefik.http.services.nextcloud.loadbalancer.server.port: 80
+      traefik.http.routers.nextcloud.middlewares: "nextcloud_redirectregex@docker"
+      traefik.http.middlewares.nextcloud_redirectregex.redirectregex.permanent: true
+      traefik.http.middlewares.nextcloud_redirectregex.redirectregex.regex: "https://(.*)/.well-known/(?:card|cal)dav"
+      traefik.http.middlewares.nextcloud_redirectregex.redirectregex.replacement: "https://$${1}/remote.php/dav"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/html:/var/www/html:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/custom_apps:/var/www/html/custom_apps:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/config:/var/www/html/config:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/data:/var/www/html/data:z"
+    depends_on:
+      db:
+        condition: "service_healthy"
+      redis:
+        condition: "service_started"
+
+  cron:
+    image: "nextcloud:32.0.3-apache"
+    entrypoint: "/cron.sh"
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-cron"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    environment:
+      TZ: "Europe/Berlin"
+    # volumes must be identical to the app container
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/html:/var/www/html:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/custom_apps:/var/www/html/custom_apps:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/config:/var/www/html/config:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/data:/var/www/html/data:z"
+    depends_on:
+      db:
+        condition: "service_healthy"
+      redis:
+        condition: "service_started"
+
+  redis:
+    image: "redis:8.4.0-alpine"
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-redis"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+
+  db:
+    image: "mariadb:lts"
+    command: "--transaction-isolation=READ-COMMITTED"
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-db"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    environment:
+      MARIADB_AUTO_UPGRADE: "1"
+      MARIADB_DISABLE_UPGRADE_BACKUP: "1"
+      MARIADB_DATABASE: "${DATABASE_DBNAME:-nextcloud}"
+      MARIADB_ROOT_PASSWORD: "${DATABASE_ROOT_PASSWORD:?error}"
+      MARIADB_USER: "${DATABASE_USERNAME:?error}"
+      MARIADB_PASSWORD: "${DATABASE_PASSWORD:?error}"
+      TZ: "Europe/Berlin"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db:/var/lib/mysql:z"
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      start_period: "10s"
+      interval: "10s"
+      timeout: "5s"
+      retries: 3
+  db-backup:
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
+    image: "tiredofit/db-backup:4.1.21"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db-backups:/backup:z"
+    environment:
+      TIMEZONE: "Europe/Berlin"
+      CONTAINER_NAME: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
+      CONTAINER_ENABLE_MONITORING: "FALSE"
+      DEFAULT_BACKUP_SCHEDULE: "0 2 * * *"
+      DEFAULT_CLEANUP_TIME: "8640" # Cleanup after 7 days
+      DB01_TYPE: "mariadb"
+      DB01_HOST: "db"
+      DB01_NAME: "${DATABASE_DBNAME:-nextcloud}"
+      DB01_USER: "${DATABASE_USERNAME:?error}"
+      DB01_PASS: "${DATABASE_PASSWORD:?error}"
+networks:
+  default: {}
+  proxy:
+    external: true
+    name: "${TRAEFIK_NETWORK_NAME:-proxy}"
