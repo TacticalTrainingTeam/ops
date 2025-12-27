@@ -38,6 +38,7 @@ services:
     configs:
       - source: "hide-emails-in-user-search"
         target: "/docker-entrypoint-hooks.d/post-upgrade/hide-emails-in-user-search.sh"
+        mode: 555
     depends_on:
       db:
         condition: "service_healthy"
