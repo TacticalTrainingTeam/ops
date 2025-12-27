@@ -56,6 +56,9 @@ services:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/custom_apps:/var/www/html/custom_apps:z"
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/config:/var/www/html/config:z"
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/data:/var/www/html/data:z"
+    configs:
+      - source: "hide-emails-in-user-search"
+        target: "/docker-entrypoint-hooks.d/post-upgrade/hide-emails-in-user-search.sh"
     depends_on:
       db:
         condition: "service_healthy"
@@ -118,3 +121,9 @@ networks:
     name: "${TRAEFIK_NETWORK_NAME:-proxy}"
 volumes:
   nextcloud:
+
+configs:
+  hide-emails-in-user-search:
+    content: |
+      #!/bin/sh
+      sed -i 's|$entry->addEMailAddress($email);|// $entry->addEMailAddress($email);|' /var/www/html/lib/private/Contacts/ContactsMenu/ContactsStore.php
