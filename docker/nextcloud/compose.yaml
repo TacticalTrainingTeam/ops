@@ -72,6 +72,8 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    volumes:
+      - "redis:/data:Z"
 
   db:
     image: "mariadb:lts"
@@ -122,6 +124,7 @@ networks:
     name: "${TRAEFIK_NETWORK_NAME:-proxy}"
 volumes:
   nextcloud:
+  redis:
 
 configs:
   hide-emails-in-user-search:
