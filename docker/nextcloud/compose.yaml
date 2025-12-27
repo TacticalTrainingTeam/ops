@@ -127,4 +127,4 @@ configs:
   hide-emails-in-user-search:
     content: |
       #!/bin/sh
-      sed -i 's|^\([[:space:]]*\)\$entry->addEMailAddress($email);|\1// $entry->addEMailAddress($email);|' /var/www/html/lib/private/Contacts/ContactsMenu/ContactsStore.php
+      sed -i 's|^\([[:space:]]*\)\$$entry->addEMailAddress($$email);|\1// $$entry->addEMailAddress($$email);|' /var/www/html/lib/private/Contacts/ContactsMenu/ContactsStore.php
