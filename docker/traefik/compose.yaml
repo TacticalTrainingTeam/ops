@@ -99,7 +99,7 @@ configs:
                 permanent: true
         websecure-external:
           address: ":443"
-          #http3: true
+          http3: true
           http:
             tls:
               certResolver: "letsencrypt"
@@ -137,8 +137,8 @@ configs:
               - "${NETWORK_SUBNET:?error}"
         websecure-internal:
           address: ":8443"
-          #http3: true
-          #  advertisedPort: 443
+          http3: true
+            advertisedPort: 443
           http:
             tls:
               certResolver: letsencrypt
