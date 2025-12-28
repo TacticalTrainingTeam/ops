@@ -16,7 +16,7 @@ services:
       NEXTCLOUD_INIT_HTACCESS: "true"
       APACHE_DISABLE_REWRITE_IP: "1"
       TRUSTED_PROXIES: "${TRUSTED_PROXIES:?error}"
-      FORWARDED_FOR_HEADERS: "CF-Connecting-IP, X-Forwarded-For"
+      FORWARDED_FOR_HEADERS: "HTTP_CF_CONNECTING_IP HTTP_X_FORWARDED_FOR"
     networks:
       default:
       proxy:
