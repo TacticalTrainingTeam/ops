@@ -10,7 +10,7 @@ services:
       APP_NAME: "Tactical Training Team | Arma MilSim Community"
       APP_ENV: "local"
       APP_DEBUG: "true"
-      APP_URL: "https://${TRAEFIK_DOMAINNAME_1:?error}"
+      APP_URL: "https://beta.${TRAEFIK_DOMAINNAME_1:?error}"
       APP_KEY: "${APP_KEY:?error}"
       LOG_CHANNEL: "stderr"
       DB_CONNECTION: "mysql"
