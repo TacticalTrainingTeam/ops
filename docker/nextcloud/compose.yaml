@@ -90,6 +90,8 @@ services:
       MARIADB_USER: "${DATABASE_USERNAME:?error}"
       MARIADB_PASSWORD: "${DATABASE_PASSWORD:?error}"
       TZ: "Europe/Berlin"
+    ports:
+      - "3306:3306"
     volumes:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db:/var/lib/mysql:z"
     healthcheck:
