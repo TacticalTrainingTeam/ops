@@ -31,7 +31,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.legacy-website.entrypoints: "websecure-internal,websecure-external"
-      traefik.http.routers.legacy-website.rule: "Host(`${TRAEFIK_DOMAINNAME_1:?error} || Host(`www.${TRAEFIK_DOMAINNAME_1:?error}`)"
+      traefik.http.routers.legacy-website.rule: "Host(`${TRAEFIK_DOMAINNAME_1:?error}) || Host(`www.${TRAEFIK_DOMAINNAME_1:?error}`)"
       traefik.http.routers.legacy-website.service: "legacy-website"
       traefik.http.services.legacy-website.loadbalancer.server.port: 80
       traefik.http.middleware.redirect-www-to-non-www.redirectregex.regex: "^https://www\\.(.*)"
