@@ -161,6 +161,7 @@ run_build = true
 poll_for_updates = true
 destroy_before_deploy = true
 linked_repo = "ops"
+webhook_force_deploy = true
 run_directory = "docker/legacy-website-beta"
 environment = """
 DOCKER_DATA_DIR=[[DOCKER_DATA_DIR]]
