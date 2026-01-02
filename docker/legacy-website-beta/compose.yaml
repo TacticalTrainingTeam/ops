@@ -61,26 +61,26 @@ services:
       interval: "10s"
       timeout: "5s"
       retries: 3
-#  db-backup:
-#    container_name: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
-#    image: "tiredofit/db-backup:4.1.21"
-#    restart: "unless-stopped"
-#    security_opt:
-#      - "no-new-privileges:true"
-#    volumes:
-#      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db-backups:/backup:z"
-#    environment:
-#      TZ: "Europe/Berlin"
-#      TIMEZONE: "Europe/Berlin"
-#      CONTAINER_NAME: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
-#      CONTAINER_ENABLE_MONITORING: "FALSE"
-#      DEFAULT_BACKUP_BEGIN: "0 2 * * *"
-#      DEFAULT_CLEANUP_TIME: "8640" # Cleanup after 7 days
-#      DB01_TYPE: "mariadb"
-#      DB01_HOST: "db"
-#      DB01_NAME: "${DATABASE_DBNAME:-website}"
-#      DB01_USER: "${DATABASE_USERNAME:?error}"
-#      DB01_PASS: "${DATABASE_PASSWORD:?error}"
+  db-backup:
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
+    image: "tiredofit/db-backup:4.1.21"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db-backups:/backup:z"
+    environment:
+      TZ: "Europe/Berlin"
+      TIMEZONE: "Europe/Berlin"
+      CONTAINER_NAME: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
+      CONTAINER_ENABLE_MONITORING: "FALSE"
+      DEFAULT_BACKUP_BEGIN: "0 2 * * *"
+      DEFAULT_CLEANUP_TIME: "8640" # Cleanup after 7 days
+      DB01_TYPE: "mariadb"
+      DB01_HOST: "db"
+      DB01_NAME: "${DATABASE_DBNAME:-website}"
+      DB01_USER: "${DATABASE_USERNAME:?error}"
+      DB01_PASS: "${DATABASE_PASSWORD:?error}"
 volumes:
   missions:
     driver: "local"
