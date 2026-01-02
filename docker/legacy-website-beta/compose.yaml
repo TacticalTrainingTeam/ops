@@ -66,6 +66,9 @@ services:
       LARASCORD_PREFIX: "larascord"
       LARASCORD_SCOPE: "identify&email&guilds&guilds.members.read"
       TTT_MISSIONS_PATH: "/missions/"
+    depends_on:
+      db:
+        condition: "service_healthy"
   db:
     image: "mariadb:lts"
     container_name: "${COMPOSE_PROJECT_NAME:?error}-db"
