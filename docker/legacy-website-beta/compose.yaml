@@ -1,0 +1,96 @@
+services:
+  website:
+    build: "https://github.com/TacticalTrainingTeam/de.tacticalteam.git"
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-website"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    environment:
+      TZ: "Europe/Berlin"
+      APP_NAME: "Tactical Training Team | Arma MilSim Community"
+      APP_ENV: "local"
+      APP_DEBUG: "true"
+      APP_URL: "https://${TRAEFIK_DOMAINNAME_1:?error}"
+      APP_KEY: "${APP_KEY:?error}"
+      LOG_CHANNEL: "stderr"
+      DB_CONNECTION: "mysql"
+      DB_HOST: "db"
+      DB_PORT: "3306"
+      DB_DATABASE: "${DATABASE_DBNAME:-website}"
+      DB_USERNAME: "${DATABASE_USERNAME:?error}"
+      DB_PASSWORD: "${DATABASE_PASSWORD:?error}"
+      LARASCORD_CLIENT_ID: "${LARASCORD_CLIENT_ID:?error}"
+      LARASCORD_CLIENT_SECRET: "${LARASCORD_CLIENT_SECRET:?error}"
+      LARASCORD_GRANT_TYPE: "authorization_code"
+      LARASCORD_PREFIX: "larascord"
+      LARASCORD_SCOPE: "identify&email&guilds&guilds.members.read"
+      TTT_MISSIONS_PATH: "/missions"
+    networks:
+      default:
+      proxy:
+    labels:
+      traefik.enable: true
+      traefik.http.routers.legacy-website-beta.entrypoints: "websecure-internal,websecure-external"
+      traefik.http.routers.legacy-website-beta.rule: "Host(`beta.${TRAEFIK_DOMAINNAME_1:?error}`)"
+      traefik.http.routers.legacy-website-beta.service: "legacy-website-beta"
+      traefik.http.services.legacy-website-beta.loadbalancer.server.port: 80
+    volumes:
+      - "missions:/missions:Z"
+    depends_on:
+      db:
+        condition: "service_healthy"
+  db:
+    image: "mariadb:lts"
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-db"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    environment:
+      MARIADB_AUTO_UPGRADE: "1"
+      MARIADB_DISABLE_UPGRADE_BACKUP: "1"
+      MARIADB_DATABASE: "${DATABASE_DBNAME:-website}"
+      MARIADB_ROOT_PASSWORD: "${DATABASE_ROOT_PASSWORD:?error}"
+      MARIADB_USER: "${DATABASE_USERNAME:?error}"
+      MARIADB_PASSWORD: "${DATABASE_PASSWORD:?error}"
+      TZ: "Europe/Berlin"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db:/var/lib/mysql:z"
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      start_period: "10s"
+      interval: "10s"
+      timeout: "5s"
+      retries: 3
+#  db-backup:
+#    container_name: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
+#    image: "tiredofit/db-backup:4.1.21"
+#    restart: "unless-stopped"
+#    security_opt:
+#      - "no-new-privileges:true"
+#    volumes:
+#      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db-backups:/backup:z"
+#    environment:
+#      TZ: "Europe/Berlin"
+#      TIMEZONE: "Europe/Berlin"
+#      CONTAINER_NAME: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
+#      CONTAINER_ENABLE_MONITORING: "FALSE"
+#      DEFAULT_BACKUP_BEGIN: "0 2 * * *"
+#      DEFAULT_CLEANUP_TIME: "8640" # Cleanup after 7 days
+#      DB01_TYPE: "mariadb"
+#      DB01_HOST: "db"
+#      DB01_NAME: "${DATABASE_DBNAME:-website}"
+#      DB01_USER: "${DATABASE_USERNAME:?error}"
+#      DB01_PASS: "${DATABASE_PASSWORD:?error}"
+volumes:
+  missions:
+    driver: "local"
+    driver_opts:
+      type: "cifs"
+      o: "username=${SMB_USERNAME:?error},password=${SMB_PASSWORD:?error},rw,noperm,file_mode=0777,dir_mode=0777"
+      device: "//${SMB_HOST:?error}/${SMB_PATH_MISSIONS:?error}"
+
+networks:
+  default: {}
+  proxy:
+    external: true
+    name: "${TRAEFIK_NETWORK_NAME:-proxy}"
