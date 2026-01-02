@@ -24,7 +24,7 @@ services:
       LARASCORD_GRANT_TYPE: "authorization_code"
       LARASCORD_PREFIX: "larascord"
       LARASCORD_SCOPE: "identify&email&guilds&guilds.members.read"
-      TTT_MISSIONS_PATH: "/missions"
+      TTT_MISSIONS_PATH: "/missions/"
     networks:
       default:
       proxy:
