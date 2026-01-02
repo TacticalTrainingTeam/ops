@@ -43,36 +43,6 @@ services:
       db:
         condition: "service_healthy"
 
-  scheduler:
-    build: "https://github.com/TacticalTrainingTeam/de.tacticalteam.git"
-    container_name: "${COMPOSE_PROJECT_NAME:?error}-scheduler"
-    entrypoint: "/var/www/docker/scheduler.sh"
-    restart: "unless-stopped"
-    security_opt:
-      - "no-new-privileges:true"
-    environment:
-      TZ: "Europe/Berlin"
-      APP_NAME: "Tactical Training Team | Arma MilSim Community"
-      APP_ENV: "production"
-      APP_DEBUG: "false"
-      APP_URL: "https://${TRAEFIK_DOMAINNAME_1:?error}"
-      APP_KEY: "${APP_KEY:?error}"
-      LOG_CHANNEL: "stderr"
-      DB_CONNECTION: "mysql"
-      DB_HOST: "db"
-      DB_PORT: "3306"
-      DB_DATABASE: "${DATABASE_DBNAME:-website}"
-      DB_USERNAME: "${DATABASE_USERNAME:?error}"
-      DB_PASSWORD: "${DATABASE_PASSWORD:?error}"
-      LARASCORD_CLIENT_ID: "${LARASCORD_CLIENT_ID:?error}"
-      LARASCORD_CLIENT_SECRET: "${LARASCORD_CLIENT_SECRET:?error}"
-      LARASCORD_GRANT_TYPE: "authorization_code"
-      LARASCORD_PREFIX: "larascord"
-      LARASCORD_SCOPE: "identify&email&guilds&guilds.members.read"
-      TTT_MISSIONS_PATH: "/missions/"
-    depends_on:
-      db:
-        condition: "service_healthy"
   db:
     image: "mariadb:lts"
     container_name: "${COMPOSE_PROJECT_NAME:?error}-db"
