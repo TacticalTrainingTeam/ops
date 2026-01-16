@@ -1,6 +1,6 @@
 services:
   coredns:
-    image: "coredns/coredns:1.13.2"
+    image: "coredns/coredns:1.14.1"
     container_name: "coredns"
     restart: "unless-stopped"
     command: "-conf /etc/coredns/Corefile -dns.port 53"
