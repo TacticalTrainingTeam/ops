@@ -80,6 +80,24 @@ AUTHENTIK_EMAIL_FROM=[[COMMON_SMTP_NO_REPLY_EMAIL]]
 ##
 
 [[stack]]
+name = "beszel"
+[stack.config]
+server = "local"
+poll_for_updates = true
+destroy_before_deploy = true
+linked_repo = "ops-home"
+run_directory = "docker-priv-prod/beszel"
+environment = """
+DOCKER_DATA_DIR=[[DOCKER_DATA_DIR]]
+BESZEL_URL=[[BESZEL_URL]]
+BESZEL_SYSTEM_KEY=[[BESZEL_SYSTEM_KEY]]
+BESZEL_TOKEN=[[BESZEL_TOKEN]]
+TZ=[[TZ]]
+"""
+
+##
+
+[[stack]]
 name = "bot-nachrichtenoffizier"
 [stack.config]
 server = "local"

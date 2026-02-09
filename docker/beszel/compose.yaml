@@ -1,0 +1,63 @@
+services:
+  beszel:
+    image: "henrygd/beszel:0.18.3"
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-app"
+    restart: unless-stopped
+    security_opt:
+      - "no-new-privileges:true"
+    environment:
+      TZ: "${TZ:-Europe/Berlin}"
+      APP_URL: "${BESZEL_URL:?error}"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/data:/beszel_data:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/socket:/beszel_socket:z"
+    networks:
+      default:
+      proxy:
+    labels:
+      traefik.enable: true
+      traefik.http.routers.beszel.entrypoints: "websecure-internal"
+      traefik.http.routers.beszel.rule: "Host(`monitoring.${TRAEFIK_DOMAINNAME_1:?error}`)"
+      traefik.http.routers.beszel.service: "beszel"
+      traefik.http.services.beszel.loadbalancer.server.port: 8090
+
+  dockerproxy:
+    image: "ghcr.io/tecnativa/docker-socket-proxy:v0.4.2"
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-dockerproxy"
+    security_opt:
+      - "no-new-privileges:true"
+    environment:
+      CONTAINERS: 1
+      INFO: 1
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    restart: unless-stopped
+    networks:
+      default:
+
+  beszel-agent:
+    image: "henrygd/beszel-agent:0.18.3-alpine"
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-agent"
+    restart: unless-stopped
+    security_opt:
+      - "no-new-privileges:true"
+    depends_on:
+      - dockerproxy
+    network_mode: host
+    environment:
+      TZ: "${TZ:-Europe/Berlin}"
+      LISTEN: "/beszel_socket/beszel.sock"
+      DOCKER_HOST: "tcp://dockerproxy_beszel:2375"
+      KEY: "${BESZEL_SYSTEM_KEY:?error}"
+      TOKEN: "${BESZEL_TOKEN:?error}"
+      HUB_URL: "${BESZEL_URL:?error}"
+      DISK_USAGE_CACHE: "30m"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/socket:/beszel_socket:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/agent-data:/var/lib/beszel-agent:z"
+
+networks:
+  default:
+  proxy:
+    external: true
+    name: "${TRAEFIK_NETWORK_NAME:-proxy}"
