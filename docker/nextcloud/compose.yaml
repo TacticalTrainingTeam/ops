@@ -67,7 +67,7 @@ services:
         condition: "service_started"
 
   redis:
-    image: "redis:8.4.0-alpine"
+    image: "redis:8.6.0-alpine"
     container_name: "${COMPOSE_PROJECT_NAME:?error}-redis"
     restart: "unless-stopped"
     security_opt:
