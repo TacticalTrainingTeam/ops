@@ -47,7 +47,7 @@ services:
     environment:
       TZ: "${TZ:-Europe/Berlin}"
       LISTEN: "/beszel_socket/beszel.sock"
-      DOCKER_HOST: "tcp://dockerproxy_beszel:2375"
+      DOCKER_HOST: "tcp://beszel-dockerproxy:2375"
       KEY: "${BESZEL_SYSTEM_KEY:?error}"
       TOKEN: "${BESZEL_TOKEN:?error}"
       HUB_URL: "${BESZEL_URL:?error}"
