@@ -88,7 +88,7 @@ services:
 
   db-backup:
     container_name: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
-    image: "tiredofit/db-backup:4.1.99"
+    image: "tiredofit/db-backup:4.1.100"
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
