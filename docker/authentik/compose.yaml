@@ -88,21 +88,7 @@ services:
 
   db-backup:
     container_name: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
-    # image: "tiredofit/db-backup:4.1.21"
-    # Workaround until Postgres 18 is supported
-    # https://github.com/tiredofit/docker-db-backup/issues/431
-    build:
-      context: .
-      dockerfile_inline: |
-        FROM postgres:18.1-alpine AS pgsql
-        FROM tiredofit/db-backup:4.1.21
-
-        RUN set -ex; \
-            mkdir -p /usr/libexec/postgresql18; \
-            rm -f /usr/libexec/postgresql; \
-            ln -sf /usr/libexec/postgresql18 /usr/libexec/postgresql
-
-        COPY --from=pgsql /usr/local/bin/* /usr/libexec/postgresql18/
+    image: "tiredofit/db-backup:4.1.99"
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
