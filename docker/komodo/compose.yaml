@@ -19,6 +19,7 @@ services:
   core:
     image: "ghcr.io/moghtech/komodo-core:1.19.5"
     container_name: "komodo-core"
+    init: true
     labels:
       komodo.skip: # Prevent Komodo from stopping with StopAllContainers
       traefik.enable: true
@@ -56,6 +57,7 @@ services:
       TZ: "${TZ:-Europe/Berlin}"
     volumes:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/backups:/backups:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/keys:/config/keys:z"
 networks:
   default:
   proxy:
