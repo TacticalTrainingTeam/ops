@@ -7,7 +7,7 @@ services:
       - "no-new-privileges:true"
     environment:
       TZ: "${TZ:-Europe/Berlin}"
-      APP_URL: "${monitoring.${TRAEFIK_DOMAINNAME_1:?error}}"
+      APP_URL: "monitoring.${TRAEFIK_DOMAINNAME_1:?error}"
     volumes:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/data:/beszel_data:z"
     ports:
