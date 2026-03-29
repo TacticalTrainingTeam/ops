@@ -89,10 +89,7 @@ linked_repo = "ops"
 run_directory = "docker/beszel"
 environment = """
 DOCKER_DATA_DIR=[[DOCKER_DATA_DIR]]
-BESZEL_URL=[[BESZEL_URL]]
-BESZEL_SYSTEM_KEY=[[BESZEL_SYSTEM_KEY]]
-BESZEL_TOKEN=[[BESZEL_TOKEN]]
-TZ=[[TZ]]
+TRAEFIK_DOMAINNAME_1=[[TRAEFIK_DOMAINNAME_1]]
 """
 
 ##
