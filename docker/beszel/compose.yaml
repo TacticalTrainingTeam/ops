@@ -11,7 +11,7 @@ services:
     volumes:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/data:/beszel_data:z"
     ports:
-      - "8090:8090"
+      - "9090:8090"
     networks:
       proxy:
     labels:
