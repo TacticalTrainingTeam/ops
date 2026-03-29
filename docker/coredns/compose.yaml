@@ -38,8 +38,8 @@ configs:
           ${IPV4:?error} archiv.${DOMAINNAME?error}
           ${IPV6:?error} archiv.${DOMAINNAME?error}
       
-          ${IPV4:?error} files-legacy.${DOMAINNAME?error}
-          ${IPV6:?error} files-legacy.${DOMAINNAME?error}
+          ${IPV4:?error} monitoring.${DOMAINNAME?error}
+          ${IPV6:?error} monitoring.${DOMAINNAME?error}
       
           fallthrough
         }
