@@ -19,7 +19,7 @@ services:
       traefik.http.routers.beszel.entrypoints: "websecure-internal"
       traefik.http.routers.beszel.rule: "Host(`monitoring.${TRAEFIK_DOMAINNAME_1:?error}`)"
       traefik.http.routers.beszel.service: "beszel"
-      traefik.http.services.beszel.loadbalancer.server.port: 10090
+      traefik.http.services.beszel.loadbalancer.server.port: 8090
 
 networks:
   proxy:
