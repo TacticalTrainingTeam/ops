@@ -12,9 +12,15 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.authentik.entrypoints: "websecure-internal,websecure-external"
-      traefik.http.routers.authentik.rule: "Host(`login.${TRAEFIK_DOMAINNAME_1:?error}`)"
       traefik.http.routers.authentik.service: "authentik"
       traefik.http.services.authentik.loadbalancer.server.port: 9000
+      # https://github.com/goauthentik/authentik/issues/3566
+      traefik.http.routers.authentik.rule: "Host(`login.${TRAEFIK_DOMAINNAME_1:?error}`) || HostRegexp(`{subdomain:[a-z0-9-]+}.${TRAEFIK_DOMAINNAME_1:?error}`) && PathPrefix(`/outpost.goauthentik.io/`)"
+      traefik.http.routers.authentik.priority: 10
+      traefik.http.middlewares.authentik.forwardauth.address: "http://${COMPOSE_PROJECT_NAME:?error}-server:9000/outpost.goauthentik.io/auth/traefik"
+      traefik.http.middlewares.authentik.forwardauth.trustForwardHeader: true
+      traefik.http.middlewares.authentik.forwardauth.authResponseHeaders: "X-authentik-username,X-authentik-groups,X-authentik-entitlements,X-authentik-email,X-authentik-name,X-authentik-uid,X-authentik-jwt,X-authentik-meta-jwks,X-authentik-meta-outpost,X-authentik-meta-provider,X-authentik-meta-app,X-authentik-meta-version"
+
     networks:
       - "default"
       - "proxy"
