@@ -49,6 +49,10 @@ services:
       KOMODO_LOCAL_AUTH: "${KOMODO_LOCAL_AUTH:-true}"
       KOMODO_DISABLE_USER_REGISTRATION: "${KOMODO_DISABLE_USER_REGISTRATION:-true}"
       KOMODO_DISABLE_NON_ADMIN_CREATE: "${KOMODO_DISABLE_NON_ADMIN_CREATE:-true}"
+      KOMODO_OIDC_ENABLED: true
+      KOMODO_OIDC_PROVIDER: "https://login.${TRAEFIK_DOMAINNAME_1:?error}/application/o/komodo/"
+      KOMODO_OIDC_CLIENT_ID: "${KOMODO_OIDC_CLIENT_ID:?error}"
+      KOMODO_OIDC_CLIENT_SECRET: "${KOMODO_OIDC_CLIENT_SECRET:?error}"
       # KOMODO_INIT_ADMIN_USERNAME: "${KOMODO_INIT_ADMIN_USERNAME:?error}" # Only needed for bootstrapping
       # KOMODO_INIT_ADMIN_PASSWORD: "${KOMODO_INIT_ADMIN_PASSWORD:?error}" # Only needed for bootstrapping
       TZ: "${TZ:-Europe/Berlin}"
