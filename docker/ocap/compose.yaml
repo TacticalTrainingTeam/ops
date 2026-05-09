@@ -12,6 +12,7 @@ services:
       OCAP_CUSTOMIZE_HEADERSUBTITLE: "Replay"
       OCAP_CUSTOMIZE_WEBSITEURL: "https://www.tacticalteam.de"
       OCAP_CUSTOMIZE_WEBSITELOGO: "https://www.tacticalteam.de/assets/favicon/favicon-32x32.png"
+      OCAP_CUSTOMIZE_CSSOVERRIDES: '{"--accent-primary":"#a10f2b","--accent-primary-dark":"#7a0b20","--text-on-accent":"#f5f2f2","--accent-success":"#c6cfba","--accent-success-dark":"#9bab88","--accent-warning":"#e6a15c","--accent-focus":"#a10f2b","--text-primary":"#f5f2f2","--text-secondary":"#d1cdcd","--text-muted":"#ada9a9","--text-dim":"#898686","--text-dimmer":"#656363","--text-dimmest":"#414040","--bg-dark":"#191919","--bg-panel":"rgba(25, 25, 25, 0.88)","--bg-panel-header":"rgba(25, 25, 25, 0.6)","--bg-surface":"#262626","--bg-surface-hover":"#333333","--bg-interactive":"rgba(245, 242, 242, 0.05)","--bg-interactive-hover":"rgba(245, 242, 242, 0.10)","--bg-modal-header":"rgba(161, 15, 43, 0.85)"}'
       OCAP_AUTH_ADMINSTEAMIDS: "${OCAP_AUTH_ADMINSTEAMIDS:?error}"
     networks:
       proxy:
