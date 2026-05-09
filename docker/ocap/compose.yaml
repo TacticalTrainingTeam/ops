@@ -1,6 +1,6 @@
 services:
   ocap:
-    image: "ghcr.io/ocap2/web:2.1.1-full"
+    image: "ghcr.io/ocap2/web:2.1.1"
     container_name: "ocap"
     restart: "unless-stopped"
     security_opt:
@@ -8,6 +8,8 @@ services:
     environment:
       OCAP_SECRET: "${OCAP_SECRET:?error}"
       OCAP_CUSTOMIZE_ENABLED: "true"
+      OCAP_CUSTOMIZE_HEADERTITLE: "Tactical Training Team"
+      OCAP_CUSTOMIZE_HEADERSUBTITLE: "Replay"
       OCAP_CUSTOMIZE_WEBSITEURL: "https://www.tacticalteam.de"
       OCAP_CUSTOMIZE_WEBSITELOGO: "https://www.tacticalteam.de/assets/favicon/favicon-32x32.png"
       OCAP_AUTH_ADMINSTEAMIDS: "${OCAP_AUTH_ADMINSTEAMIDS:?error}"
