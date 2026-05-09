@@ -1,14 +1,16 @@
 services:
   ocap:
-    build: "https://github.com/TacticalTrainingTeam/ocap-web.git"
+    image: "ghcr.io/ocap2/web:2.1.1-full"
     container_name: "ocap"
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
     environment:
       OCAP_SECRET: "${OCAP_SECRET:?error}"
+      OCAP_CUSTOMIZE_ENABLED: "true"
       OCAP_CUSTOMIZE_WEBSITEURL: "https://www.tacticalteam.de"
       OCAP_CUSTOMIZE_WEBSITELOGO: "https://www.tacticalteam.de/assets/favicon/favicon-32x32.png"
+      OCAP_AUTH_ADMINSTEAMIDS: "${OCAP_AUTH_ADMINSTEAMIDS:?error}"
     networks:
       proxy:
     labels:
