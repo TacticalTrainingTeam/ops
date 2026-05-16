@@ -12,10 +12,11 @@ services:
       proxy:
     labels:
       traefik.enable: true
-      traefik.http.routers.archiv.entrypoints: "websecure-internal"
+      traefik.http.routers.archiv.entrypoints: "websecure-external,websecure-internal"
       traefik.http.routers.archiv.rule: "Host(`archiv.${TRAEFIK_DOMAINNAME_1:?error}`)"
       traefik.http.routers.archiv.service: "archiv"
       traefik.http.services.archiv.loadbalancer.server.port: 80
+      traefik.http.routers.archiv.middlewares: "authentik"
     volumes:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/html:/var/www/html:z"
     depends_on:
