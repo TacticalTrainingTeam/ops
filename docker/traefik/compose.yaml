@@ -54,6 +54,7 @@ services:
       traefik.http.routers.traefik.entrypoints: "websecure-internal"
       traefik.http.routers.traefik.rule: "Host(`traefik.${DOMAINNAME_1?error}`)"
       traefik.http.routers.traefik.service: "api@internal"
+      traefik.http.routers.traefik.middlewares: "authentik"
 
   whoami:
     image: "traefik/whoami"
