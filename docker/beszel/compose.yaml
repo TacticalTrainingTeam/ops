@@ -8,6 +8,7 @@ services:
     environment:
       TZ: "${TZ:-Europe/Berlin}"
       USER_CREATION: "true"
+      SHARE_ALL_SYSTEMS: "true"
     volumes:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/data:/beszel_data:z"
     ports:
