@@ -116,7 +116,7 @@ configs:
               - "${NETWORK_SUBNET:?error}"
           http:
             middlewares:
-              - "xff2realip"
+              - "xff2realip@docker"
             redirections:
               entryPoint:
                 to: websecure-external
@@ -137,7 +137,7 @@ configs:
             trustedIPs: *trustedIps
           http:
             middlewares:
-              - "xff2realip"
+              - "xff2realip@docker"
             tls:
               certResolver: "letsencrypt"
               domains:
