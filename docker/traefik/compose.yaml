@@ -15,7 +15,7 @@ services:
       - "/run"
   traefik:
     container_name: "traefik"
-    image: "traefik:v3.6.15"
+    image: "traefik:v3.7.1"
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
@@ -55,6 +55,7 @@ services:
       traefik.http.routers.traefik.rule: "Host(`traefik.${DOMAINNAME_1?error}`)"
       traefik.http.routers.traefik.service: "api@internal"
       traefik.http.routers.traefik.middlewares: "authentik"
+      traefik.http.middlewares.xff2realip.plugin.traefik-xff-to-xrealip.depth: 0
 
   whoami:
     image: "traefik/whoami"
@@ -85,32 +86,8 @@ configs:
       entryPoints:
         web-external:
           address: ":80"
-          http:
-            redirections:
-              entryPoint:
-                to: websecure-external
-                scheme: https
-                permanent: true
-        web-internal:
-          address: ":8080"
-          http:
-            redirections:
-              entryPoint:
-                to: websecure-internal
-                scheme: https
-                permanent: true
-        websecure-external:
-          address: ":443"
-          http3: true
-          http:
-            tls:
-              certResolver: "letsencrypt"
-              domains:
-                - main: "${DOMAINNAME_1}"
-                  sans:
-                    - "*.${DOMAINNAME_1}"
           forwardedHeaders:
-            trustedIPs:
+            trustedIPs: &trustedIps
               # Cloudflare IP ranges, as from https://www.cloudflare.com/ips/
               - "173.245.48.0/20"
               - "103.21.244.0/22"
@@ -137,6 +114,36 @@ configs:
               # Docker network IP range
               - "172.16.0.0/16"
               - "${NETWORK_SUBNET:?error}"
+          http:
+            middlewares:
+              - "xff2realip"
+            redirections:
+              entryPoint:
+                to: websecure-external
+                scheme: https
+                permanent: true
+        web-internal:
+          address: ":8080"
+          http:
+            redirections:
+              entryPoint:
+                to: websecure-internal
+                scheme: https
+                permanent: true
+        websecure-external:
+          address: ":443"
+          http3: true
+          forwardedHeaders:
+            trustedIPs: *trustedIps
+          http:
+            middlewares:
+              - "xff2realip"
+            tls:
+              certResolver: "letsencrypt"
+              domains:
+                - main: "${DOMAINNAME_1}"
+                  sans:
+                    - "*.${DOMAINNAME_1}"
         websecure-internal:
           address: ":8443"
           http3:
@@ -187,3 +194,9 @@ configs:
             email: "${DOMAINNAME_1_EMAIL:?error}"
             storage: "/letsencrypt/acme.json"
             caServer: "https://acme-v02.api.letsencrypt.org/directory"
+      
+      experimental:
+        plugins:
+          traefik-xff-to-xrealip:
+            moduleName: github.com/jeppestaerk/traefik-xff-to-xrealip
+            version: v0.1.3
