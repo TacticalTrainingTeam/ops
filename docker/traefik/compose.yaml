@@ -15,7 +15,7 @@ services:
       - "/run"
   traefik:
     container_name: "traefik"
-    image: "traefik:v3.7.1"
+    image: "traefik:v3.6.15"
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
@@ -55,7 +55,6 @@ services:
       traefik.http.routers.traefik.rule: "Host(`traefik.${DOMAINNAME_1?error}`)"
       traefik.http.routers.traefik.service: "api@internal"
       traefik.http.routers.traefik.middlewares: "authentik"
-      traefik.http.middlewares.xff2realip.plugin.traefik-xff-to-xrealip.depth: 0
 
   whoami:
     image: "traefik/whoami"
@@ -87,36 +86,6 @@ configs:
         web-external:
           address: ":80"
           http:
-            forwardedHeaders:
-              trustedIPs: &trustedIps
-                # Cloudflare IP ranges, as from https://www.cloudflare.com/ips/
-                - "173.245.48.0/20"
-                - "103.21.244.0/22"
-                - "103.22.200.0/22"
-                - "103.31.4.0/22"
-                - "141.101.64.0/18"
-                - "108.162.192.0/18"
-                - "190.93.240.0/20"
-                - "188.114.96.0/20"
-                - "197.234.240.0/22"
-                - "198.41.128.0/17"
-                - "162.158.0.0/15"
-                - "104.16.0.0/13"
-                - "104.24.0.0/14"
-                - "172.64.0.0/13"
-                - "131.0.72.0/22"
-                - "2400:cb00::/32"
-                - "2606:4700::/32"
-                - "2803:f800::/32"
-                - "2405:b500::/32"
-                - "2405:8100::/32"
-                - "2a06:98c0::/29"
-                - "2c0f:f248::/32"
-                # Docker network IP range
-                - "172.16.0.0/16"
-                - "${NETWORK_SUBNET:?error}"
-            middlewares:
-              - "xff2realip"
             redirections:
               entryPoint:
                 to: websecure-external
@@ -134,17 +103,40 @@ configs:
           address: ":443"
           http3: true
           http:
-            forwardedHeaders:
-              trustedIPs: *trustedIps
-            middlewares:
-              - "xff2realip"
             tls:
               certResolver: "letsencrypt"
               domains:
                 - main: "${DOMAINNAME_1}"
                   sans:
                     - "*.${DOMAINNAME_1}"
-          
+          forwardedHeaders:
+            trustedIPs:
+              # Cloudflare IP ranges, as from https://www.cloudflare.com/ips/
+              - "173.245.48.0/20"
+              - "103.21.244.0/22"
+              - "103.22.200.0/22"
+              - "103.31.4.0/22"
+              - "141.101.64.0/18"
+              - "108.162.192.0/18"
+              - "190.93.240.0/20"
+              - "188.114.96.0/20"
+              - "197.234.240.0/22"
+              - "198.41.128.0/17"
+              - "162.158.0.0/15"
+              - "104.16.0.0/13"
+              - "104.24.0.0/14"
+              - "172.64.0.0/13"
+              - "131.0.72.0/22"
+              - "2400:cb00::/32"
+              - "2606:4700::/32"
+              - "2803:f800::/32"
+              - "2405:b500::/32"
+              - "2405:8100::/32"
+              - "2a06:98c0::/29"
+              - "2c0f:f248::/32"
+              # Docker network IP range
+              - "172.16.0.0/16"
+              - "${NETWORK_SUBNET:?error}"
         websecure-internal:
           address: ":8443"
           http3:
@@ -195,9 +187,3 @@ configs:
             email: "${DOMAINNAME_1_EMAIL:?error}"
             storage: "/letsencrypt/acme.json"
             caServer: "https://acme-v02.api.letsencrypt.org/directory"
-      
-      experimental:
-        plugins:
-          traefik-xff-to-xrealip:
-            moduleName: github.com/jeppestaerk/traefik-xff-to-xrealip
-            version: v0.1.3
