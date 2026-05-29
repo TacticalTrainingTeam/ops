@@ -33,6 +33,9 @@ services:
       traefik.http.routers.arma3sync-repo.rule: "Host(`mods.${TRAEFIK_DOMAINNAME_1:?error}`)"
       traefik.http.routers.arma3sync-repo.service: "arma3sync-repo"
       traefik.http.services.arma3sync-repo.loadbalancer.server.port: 80
+      traefik.http.middlewares.arma3sync-repo-bandwidth-limiter.plugin.bandwidth-limiter.defaultLimit: 13107200 # 13107200 = 100Mbit/s, 65536000 = 500Mbit/s
+      traefik.http.middlewares.repo-bandwidthlimiter.plugin.bandwidth-limiter.burstSize: 26214400 # 26214400 = 200Mbit/s, 98304000 = 750Mbit/s
+      traefik.http.routers.arma3sync-repo.middlewares: "arma3sync-repo-bandwidth-limiter" # Uncomment to enable/disable bandwidth limiting
 volumes:
   arma3sync-repo:
     driver: "local"

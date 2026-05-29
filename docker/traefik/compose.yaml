@@ -200,3 +200,7 @@ configs:
           traefik-xff-to-xrealip:
             moduleName: github.com/jeppestaerk/traefik-xff-to-xrealip
             version: v0.1.3
+          bandwidth-limiter:
+            moduleName: github.com/hhftechnology/bandwidthlimiter
+            version: v1.0.1
+      
