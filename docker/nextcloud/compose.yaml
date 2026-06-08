@@ -5,8 +5,6 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
-    extra_hosts:
-      - "files.${TRAEFIK_DOMAINNAME_1:?error}:127.0.0.1" # If nextcloud talks with itself, that shouldn't go through the proxy
     environment:
       TZ: "Europe/Berlin"
       REDIS_HOST: "redis"
