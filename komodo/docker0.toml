@@ -325,6 +325,22 @@ NETWORK_SUBNET=[[TRAEFIK_NETWORK_SUBNET]]
 
 ##
 
+[[stack]]
+name = "traefik-log-dashboard"
+[stack.config]
+server = "local"
+poll_for_updates = true
+destroy_before_deploy = true
+linked_repo = "ops"
+run_directory = "docker/traefik-log-dashboard"
+environment = """
+DOCKER_DATA_DIR=[[DOCKER_DATA_DIR]]
+TRAEFIK_DOMAINNAME_1=[[TRAEFIK_DOMAINNAME_1]]
+AUTH_TOKEN=[[TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN]]
+"""
+
+##
+
 [[repo]]
 name = "ops"
 [repo.config]

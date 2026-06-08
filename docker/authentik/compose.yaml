@@ -81,6 +81,8 @@ services:
     image: "postgres:18.4-alpine"
     container_name: "${COMPOSE_PROJECT_NAME:?error}-db"
     restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
     healthcheck:
       interval: "30s"
       retries: 5
@@ -111,7 +113,7 @@ services:
       DEFAULT_CLEANUP_TIME: "8640" # Cleanup after 7 days
       DB01_TYPE: "pgsql"
       DB01_HOST: "db"
-      DB01_NAME: "${DATABASE_NAME:-authentik}"
+      DB01_NAME: "authentik"
       DB01_USER: "${DATABASE_USERNAME:?error}"
       DB01_PASS: "${DATABASE_PASSWORD:?error}"
 

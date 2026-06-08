@@ -58,7 +58,7 @@ services:
       traefik.http.middlewares.xff2realip.plugin.traefik-xff-to-xrealip.depth: 0
 
   whoami:
-    image: "traefik/whoami"
+    image: "traefik/whoami:v1.11.0"
     container_name: "whoami"
     restart: "unless-stopped"
     security_opt:
@@ -155,6 +155,8 @@ configs:
                 - main: "${DOMAINNAME_1}"
                   sans:
                     - "*.${DOMAINNAME_1}"
+          observability:
+            accessLogs: false
         traefik:
           address: ":8090"
       
@@ -165,17 +167,25 @@ configs:
       ping: {}
       
       log:
-        # filePath: "/logs/traefik.log"
+        filePath: "/logs/traefik.log"
         level: "INFO"  # (Default: error) DEBUG, INFO, WARN, ERROR, FATAL, PANIC
-        # format: "json"  # (Default: common) common, json
-        maxSize: 100
-        maxBackups: 3
-        maxAge: 3
+        format: "json"  # (Default: common) common, json
+        maxSize: 20
+        maxBackups: 10
         compress: true
       
       accessLog:
-        # filePath: "/logs/access.log"
-        # format: "json"  # (Default: common) common, json
+        filePath: "/logs/access.log"
+        format: "json"  # (Default: common) common, json
+        bufferingSize: 0
+        fields:
+          defaultMode: keep
+          headers:
+            defaultMode: keep
+            names:
+              Authorization: redact
+              Cookie: redact
+              Set-Cookie: redact
       
       providers:
         docker:
