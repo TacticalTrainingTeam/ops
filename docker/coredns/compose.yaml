@@ -38,6 +38,9 @@ configs:
           ${IPV4:?error} monitoring.${DOMAINNAME?error}
           ${IPV6:?error} monitoring.${DOMAINNAME?error}
       
+          ${IPV4:?error} traefik-log-dashboard.${DOMAINNAME?error}
+          ${IPV6:?error} traefik-log-dashboard.${DOMAINNAME?error}
+      
           fallthrough
         }
       
