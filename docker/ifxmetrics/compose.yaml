@@ -30,3 +30,6 @@ networks:
   grafana:
     external: true
     name: "grafana"
+  proxy:
+    external: true
+    name: "proxy"
