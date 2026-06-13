@@ -1,6 +1,6 @@
 services:
   matomo:
-    image: "matomo:5.11.0-apache"
+    image: "matomo:5.11.1-apache"
     container_name: "matomo"
     restart: "unless-stopped"
     security_opt:
