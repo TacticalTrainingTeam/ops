@@ -11,6 +11,8 @@ services:
     networks:
       - "default"
       - "proxy"
+    volumes:
+      - "grafana-data:/var/lib/grafana:z"
     environment:
       GF_DATABASE_TYPE: "postgres"
       GF_DATABASE_HOST: "db"
@@ -65,6 +67,9 @@ services:
       DB01_NAME: "grafana"
       DB01_USER: "${DB_USERNAME:?error}"
       DB01_PASS: "${DB_PASSWORD:?error}"
+
+volumes:
+  grafana-data:
 
 networks:
   default: {}
