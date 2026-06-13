@@ -11,8 +11,6 @@ services:
     networks:
       - "default"
       - "proxy"
-    volumes:
-      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/grafana-data:/var/lib/grafana:z"
     environment:
       GF_DATABASE_TYPE: "postgres"
       GF_DATABASE_HOST: "db"
