@@ -129,6 +129,24 @@ DB_PASSWORD=[[GRAFANA_DB_PASSWORD]]
 ##
 
 [[stack]]
+name = "ifxmetrics"
+[stack.config]
+server = "local"
+poll_for_updates = true
+destroy_before_deploy = true
+linked_repo = "ops"
+run_directory = "docker/ifxmetrics"
+environment = """
+DOCKER_DATA_DIR=[[DOCKER_DATA_DIR]]
+TRAEFIK_DOMAINNAME_1=[[TRAEFIK_DOMAINNAME_1]]
+ADMIN_USERNAME=[[IFXMETRICS_ADMIN_USERNAME]]
+ADMIN_PASSWORD=[[IFXMETRICS_ADMIN_PASSWORD]]
+ADMIN_TOKEN=[[IFXMETRICS_ADMIN_TOKEN]]
+"""
+
+##
+
+[[stack]]
 name = "coredns"
 [stack.config]
 server = "local"

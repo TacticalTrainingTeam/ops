@@ -44,6 +44,9 @@ configs:
           ${IPV4:?error} grafana.${DOMAINNAME?error}
           ${IPV6:?error} grafana.${DOMAINNAME?error}
       
+          ${IPV4:?error} ifxmetrics.${DOMAINNAME?error}
+          ${IPV6:?error} ifxmetrics.${DOMAINNAME?error}
+      
           fallthrough
         }
       

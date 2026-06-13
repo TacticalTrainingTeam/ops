@@ -11,6 +11,7 @@ services:
     networks:
       - "default"
       - "proxy"
+      - "grafana"
     volumes:
       - "grafana-data:/var/lib/grafana:z"
     environment:
@@ -73,6 +74,8 @@ volumes:
 
 networks:
   default: {}
+  grafana:
+    name: "grafana"
   proxy:
     external: true
     name: "proxy"
