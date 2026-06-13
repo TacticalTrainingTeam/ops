@@ -1,0 +1,75 @@
+services:
+  grafana:
+    container_name: "${COMPOSE_PROJECT_NAME:?error}"
+    image: "grafana/grafana:13.0.2"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    depends_on:
+      db:
+        condition: "service_healthy"
+    networks:
+      - "default"
+      - "proxy"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/grafana-data:/var/lib/grafana:z"
+    environment:
+      GF_DATABASE_TYPE: "postgres"
+      GF_DATABASE_HOST: "db"
+      GF_DATABASE_NAME: "grafana"
+      GF_DATABASE_USER: "${DB_USERNAME:?error}"
+      GF_DATABASE_PASSWORD: "${DB_PASSWORD:?error}"
+      GF_DATABASE_SSL_MODE: "disable"
+    labels:
+      traefik.enable: true
+      traefik.http.routers.grafana.entrypoints: "websecure-internal"
+      traefik.http.routers.grafana.rule: "Host(`grafana.${TRAEFIK_DOMAINNAME_1:?error}`)"
+      traefik.http.routers.grafana.service: "grafana"
+      # traefik.http.routers.grafana.middlewares: "authentik"
+      traefik.http.services.grafana.loadbalancer.server.port: 3000
+
+  db:
+    image: "postgres:18.4-alpine"
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-db"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    healthcheck:
+      interval: "30s"
+      retries: 5
+      start_period: "20s"
+      timeout: "5s"
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db:/var/lib/postgresql:z"
+    environment:
+      POSTGRES_DB: "grafana"
+      POSTGRES_USER: "${DB_USERNAME:?error}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD:?error}"
+
+  db-backup:
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
+    image: "tiredofit/db-backup:4.1.100"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db-backups:/backup:z"
+    environment:
+      TZ: "Europe/Berlin"
+      TIMEZONE: "Europe/Berlin"
+      CONTAINER_NAME: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
+      CONTAINER_ENABLE_MONITORING: "FALSE"
+      DEFAULT_BACKUP_BEGIN: "0 2 * * *"
+      DEFAULT_CLEANUP_TIME: "8640" # Cleanup after 7 days
+      DB01_TYPE: "pgsql"
+      DB01_HOST: "db"
+      DB01_NAME: "grafana"
+      DB01_USER: "${DB_USERNAME:?error}"
+      DB01_PASS: "${DB_PASSWORD:?error}"
+
+networks:
+  default: {}
+  proxy:
+    external: true
+    name: "proxy"

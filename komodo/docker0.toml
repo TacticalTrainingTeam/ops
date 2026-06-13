@@ -112,6 +112,23 @@ CLIENT_ID=[[BOT_NACHRICHTENOFFIZIER_CLIENT_ID]]
 ##
 
 [[stack]]
+name = "grafana"
+[stack.config]
+server = "local"
+poll_for_updates = true
+destroy_before_deploy = true
+linked_repo = "ops"
+run_directory = "docker/grafana"
+environment = """
+DOCKER_DATA_DIR=[[DOCKER_DATA_DIR]]
+TRAEFIK_DOMAINNAME_1=[[TRAEFIK_DOMAINNAME_1]]
+DB_USERNAME=[[GRAFANA_DB_USERNAME]]
+DB_PASSWORD=[[GRAFANA_DB_PASSWORD]]
+"""
+
+##
+
+[[stack]]
 name = "coredns"
 [stack.config]
 server = "local"
