@@ -41,6 +41,9 @@ configs:
           ${IPV4:?error} traefik-log-dashboard.${DOMAINNAME?error}
           ${IPV6:?error} traefik-log-dashboard.${DOMAINNAME?error}
       
+          ${IPV4:?error} grafana.${DOMAINNAME?error}
+          ${IPV6:?error} grafana.${DOMAINNAME?error}
+      
           fallthrough
         }
       

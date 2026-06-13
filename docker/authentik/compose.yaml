@@ -31,7 +31,7 @@ services:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/templates:/templates:z"
     environment:
       AUTHENTIK_POSTGRESQL__HOST: "db"
-      AUTHENTIK_POSTGRESQL__NAME: "${DATABASE_NAME:-authentik}"
+      AUTHENTIK_POSTGRESQL__NAME: "authentik"
       AUTHENTIK_POSTGRESQL__USER: "${DATABASE_USERNAME:?error}"
       AUTHENTIK_POSTGRESQL__PASSWORD: "${DATABASE_PASSWORD:?error}"
       AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?error}"
@@ -63,7 +63,7 @@ services:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/certs:/certs:z"
     environment:
       AUTHENTIK_POSTGRESQL__HOST: "db"
-      AUTHENTIK_POSTGRESQL__NAME: "${DATABASE_NAME:-authentik}"
+      AUTHENTIK_POSTGRESQL__NAME: "authentik"
       AUTHENTIK_POSTGRESQL__USER: "${DATABASE_USERNAME:?error}"
       AUTHENTIK_POSTGRESQL__PASSWORD: "${DATABASE_PASSWORD:?error}"
       AUTHENTIK_SECRET_KEY: "${AUTHENTIK_SECRET_KEY:?error}"
@@ -92,7 +92,7 @@ services:
     volumes:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db:/var/lib/postgresql:z"
     environment:
-      POSTGRES_DB: "${DATABASE_NAME:-authentik}"
+      POSTGRES_DB: "authentik"
       POSTGRES_USER: "${DATABASE_USERNAME:?error}"
       POSTGRES_PASSWORD: "${DATABASE_PASSWORD:?error}"
 
@@ -121,4 +121,4 @@ networks:
   default:
   proxy:
     external: true
-    name: "${TRAEFIK_NETWORK_NAME:-proxy}"
+    name: "proxy"

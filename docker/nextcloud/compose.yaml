@@ -9,7 +9,7 @@ services:
       TZ: "Europe/Berlin"
       REDIS_HOST: "redis"
       MYSQL_HOST: "db"
-      MYSQL_DATABASE: "${DATABASE_DBNAME:-nextcloud}"
+      MYSQL_DATABASE: "nextcloud"
       MYSQL_USER: "${DATABASE_USERNAME:?error}"
       MYSQL_PASSWORD: "${DATABASE_PASSWORD:?error}"
       NEXTCLOUD_TRUSTED_DOMAINS: "files.${TRAEFIK_DOMAINNAME_1:?error}"
@@ -85,7 +85,7 @@ services:
     environment:
       MARIADB_AUTO_UPGRADE: "1"
       MARIADB_DISABLE_UPGRADE_BACKUP: "1"
-      MARIADB_DATABASE: "${DATABASE_DBNAME:-nextcloud}"
+      MARIADB_DATABASE: "nextcloud"
       MARIADB_ROOT_PASSWORD: "${DATABASE_ROOT_PASSWORD:?error}"
       MARIADB_USER: "${DATABASE_USERNAME:?error}"
       MARIADB_PASSWORD: "${DATABASE_PASSWORD:?error}"
@@ -115,14 +115,14 @@ services:
       DEFAULT_CLEANUP_TIME: "8640" # Cleanup after 7 days
       DB01_TYPE: "mariadb"
       DB01_HOST: "db"
-      DB01_NAME: "${DATABASE_DBNAME:-nextcloud}"
+      DB01_NAME: "nextcloud"
       DB01_USER: "${DATABASE_USERNAME:?error}"
       DB01_PASS: "${DATABASE_PASSWORD:?error}"
 networks:
   default: {}
   proxy:
     external: true
-    name: "${TRAEFIK_NETWORK_NAME:-proxy}"
+    name: "proxy"
 volumes:
   nextcloud:
   redis:

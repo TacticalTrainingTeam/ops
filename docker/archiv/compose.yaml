@@ -31,7 +31,7 @@ services:
     environment:
       MARIADB_AUTO_UPGRADE: "1"
       MARIADB_DISABLE_UPGRADE_BACKUP: "1"
-      MARIADB_DATABASE: "${DATABASE_DBNAME:-forum_db}"
+      MARIADB_DATABASE: "forum_db"
       MARIADB_ROOT_PASSWORD: "${DATABASE_ROOT_PASSWORD:?error}"
       MARIADB_USER: "${DATABASE_USERNAME:?error}"
       MARIADB_PASSWORD: "${DATABASE_PASSWORD:?error}"
@@ -61,11 +61,11 @@ services:
       DEFAULT_CLEANUP_TIME: "8640" # Cleanup after 7 days
       DB01_TYPE: "mariadb"
       DB01_HOST: "db"
-      DB01_NAME: "${DATABASE_DBNAME:-forum_db}"
+      DB01_NAME: "forum_db"
       DB01_USER: "${DATABASE_USERNAME:?error}"
       DB01_PASS: "${DATABASE_PASSWORD:?error}"
 networks:
   default: {}
   proxy:
     external: true
-    name: "${TRAEFIK_NETWORK_NAME:-proxy}"
+    name: "proxy"
