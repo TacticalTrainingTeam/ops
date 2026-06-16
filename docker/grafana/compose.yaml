@@ -21,6 +21,7 @@ services:
       GF_DATABASE_USER: "${DB_USERNAME:?error}"
       GF_DATABASE_PASSWORD: "${DB_PASSWORD:?error}"
       GF_DATABASE_SSL_MODE: "disable"
+      GF_SERVER_ROOT_URL: "https://monitoring.${TRAEFIK_DOMAINNAME_1:?error}"
     labels:
       traefik.enable: true
       traefik.http.routers.grafana.entrypoints: "websecure-internal"
