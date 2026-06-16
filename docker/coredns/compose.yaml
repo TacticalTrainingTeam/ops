@@ -41,8 +41,8 @@ configs:
           ${IPV4:?error} traefik-log-dashboard.${DOMAINNAME?error}
           ${IPV6:?error} traefik-log-dashboard.${DOMAINNAME?error}
       
-          ${IPV4:?error} grafana.${DOMAINNAME?error}
-          ${IPV6:?error} grafana.${DOMAINNAME?error}
+          ${IPV4:?error} beszel.${DOMAINNAME?error}
+          ${IPV6:?error} beszel.${DOMAINNAME?error}
       
           ${IPV4:?error} ifxmetrics.${DOMAINNAME?error}
           ${IPV6:?error} ifxmetrics.${DOMAINNAME?error}

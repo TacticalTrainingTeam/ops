@@ -24,7 +24,7 @@ services:
     labels:
       traefik.enable: true
       traefik.http.routers.grafana.entrypoints: "websecure-internal"
-      traefik.http.routers.grafana.rule: "Host(`grafana.${TRAEFIK_DOMAINNAME_1:?error}`)"
+      traefik.http.routers.grafana.rule: "Host(`monitoring.${TRAEFIK_DOMAINNAME_1:?error}`)"
       traefik.http.routers.grafana.service: "grafana"
       # traefik.http.routers.grafana.middlewares: "authentik"
       traefik.http.services.grafana.loadbalancer.server.port: 3000
