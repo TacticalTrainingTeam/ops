@@ -24,7 +24,7 @@ services:
       GF_SERVER_ROOT_URL: "https://monitoring.${TRAEFIK_DOMAINNAME_1:?error}"
     labels:
       traefik.enable: true
-      traefik.http.routers.grafana.entrypoints: "websecure-internal"
+      traefik.http.routers.grafana.entrypoints: "websecure-internal,websecure-external"
       traefik.http.routers.grafana.rule: "Host(`monitoring.${TRAEFIK_DOMAINNAME_1:?error}`)"
       traefik.http.routers.grafana.service: "grafana"
       traefik.http.services.grafana.loadbalancer.server.port: 3000
