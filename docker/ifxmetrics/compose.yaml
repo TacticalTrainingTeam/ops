@@ -11,8 +11,8 @@ services:
       - "grafana"
       - "proxy"
     volumes:
-      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}-influxdb2-data:/var/lib/influxdb2:z"
-      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}-influxdb2-config:/etc/influxdb2:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/influxdb2-data:/var/lib/influxdb2:z"
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/influxdb2-config:/etc/influxdb2:z"
     environment:
       DOCKER_INFLUXDB_INIT_MODE: "setup"
       DOCKER_INFLUXDB_INIT_ORG: "tactical-training-team"
