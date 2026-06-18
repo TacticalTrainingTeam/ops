@@ -25,7 +25,7 @@ services:
       traefik.http.routers.ifxmetrics.entrypoints: "websecure-internal"
       traefik.http.routers.ifxmetrics.rule: "Host(`ifxmetrics.${TRAEFIK_DOMAINNAME_1:?error}`)"
       traefik.http.routers.ifxmetrics.service: "ifxmetrics"
-      traefik.http.routers.grafana.middlewares: "authentik"
+      traefik.http.routers.ifxmetrics.middlewares: "authentik"
       traefik.http.services.ifxmetrics.loadbalancer.server.port: 8086
 networks:
   grafana:
