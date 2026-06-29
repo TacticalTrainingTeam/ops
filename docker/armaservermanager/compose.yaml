@@ -1,6 +1,6 @@
 services:
   db:
-    image: "mariadb:lts"
+    image: "mysql:lts"
     container_name: "${COMPOSE_PROJECT_NAME:?error}-db"
     restart: "unless-stopped"
     security_opt:
@@ -8,17 +8,15 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MARIADB_AUTO_UPGRADE: "1"
-      MARIADB_DISABLE_UPGRADE_BACKUP: "1"
-      MARIADB_DATABASE: "armaservermanager"
-      MARIADB_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:?error}"
-      MARIADB_USER: "${DB_USERNAME:?error}"
-      MARIADB_PASSWORD: "${DB_PASSWORD:?error}"
+      MYSQL_DATABASE: "armaservermanager"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:?error}"
+      MYSQL_USER: "${DB_USERNAME:?error}"
+      MYSQL_PASSWORD: "${DB_PASSWORD:?error}"
       TZ: "Europe/Berlin"
     volumes:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db:/var/lib/mysql:z"
     healthcheck:
-      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--protocol=tcp"]
       start_period: "10s"
       interval: "10s"
       timeout: "5s"
@@ -38,7 +36,7 @@ services:
       CONTAINER_ENABLE_MONITORING: "FALSE"
       DEFAULT_BACKUP_BEGIN: "0 2 * * *"
       DEFAULT_CLEANUP_TIME: "8640" # Cleanup after 7 days
-      DB01_TYPE: "mariadb"
+      DB01_TYPE: "mysql"
       DB01_HOST: "db"
       DB01_NAME: "armaservermanager"
       DB01_USER: "${DB_USERNAME:?error}"
