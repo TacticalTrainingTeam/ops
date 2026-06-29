@@ -1,0 +1,45 @@
+services:
+  db:
+    image: "mariadb:lts"
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-db"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_AUTO_UPGRADE: "1"
+      MARIADB_DISABLE_UPGRADE_BACKUP: "1"
+      MARIADB_DATABASE: "armaservermanager"
+      MARIADB_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:?error}"
+      MARIADB_USER: "${DB_USERNAME:?error}"
+      MARIADB_PASSWORD: "${DB_PASSWORD:?error}"
+      TZ: "Europe/Berlin"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db:/var/lib/mysql:z"
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      start_period: "10s"
+      interval: "10s"
+      timeout: "5s"
+      retries: 3
+  db-backup:
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
+    image: "tiredofit/db-backup:4.1.100"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db-backups:/backup:z"
+    environment:
+      TZ: "Europe/Berlin"
+      TIMEZONE: "Europe/Berlin"
+      CONTAINER_NAME: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
+      CONTAINER_ENABLE_MONITORING: "FALSE"
+      DEFAULT_BACKUP_BEGIN: "0 2 * * *"
+      DEFAULT_CLEANUP_TIME: "8640" # Cleanup after 7 days
+      DB01_TYPE: "mariadb"
+      DB01_HOST: "db"
+      DB01_NAME: "armaservermanager"
+      DB01_USER: "${DB_USERNAME:?error}"
+      DB01_PASS: "${DB_PASSWORD:?error}"

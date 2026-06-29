@@ -56,6 +56,23 @@ MOUNT_PATH_LOCAL_MODS=[[ARMA3SYNC_REPO_MOUNT_PATH_LOCAL_MODS]]
 ##
 
 [[stack]]
+name = "armaservermanager"
+[stack.config]
+server = "local"
+poll_for_updates = true
+destroy_before_deploy = true
+linked_repo = "ops"
+run_directory = "docker/armaservermanager"
+environment = """
+DOCKER_DATA_DIR=[[DOCKER_DATA_DIR]]
+DB_USERNAME=[[ARMASERVERMANAGER_DB_USERNAME]]
+DB_PASSWORD=[[ARMASERVERMANAGER_DB_PASSWORD]]
+DB_ROOT_PASSWORD=[[ARMASERVERMANAGER_DB_ROOT_PASSWORD]]
+"""
+
+##
+
+[[stack]]
 name = "authentik"
 [stack.config]
 server = "local"

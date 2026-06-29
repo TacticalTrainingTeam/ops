@@ -44,6 +44,9 @@ configs:
           ${IPV4:?error} ifxmetrics.${DOMAINNAME?error}
           ${IPV6:?error} ifxmetrics.${DOMAINNAME?error}
       
+          ${IPV4:?error} asm.${DOMAINNAME?error}
+          ${IPV6:?error} asm.${DOMAINNAME?error}
+      
           fallthrough
         }
       
