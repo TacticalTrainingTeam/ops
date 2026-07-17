@@ -47,6 +47,9 @@ services:
       POSTGRES_DB: "grafana"
       POSTGRES_USER: "${DB_USERNAME:?error}"
       POSTGRES_PASSWORD: "${DB_PASSWORD:?error}"
+    networks:
+      - "default"
+      - "dbs"
 
   db-backup:
     container_name: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
@@ -73,9 +76,12 @@ volumes:
   grafana-data:
 
 networks:
-  default: {}
+  default:
   grafana:
     name: "grafana"
   proxy:
     external: true
     name: "proxy"
+  dbs:
+    external: true
+    name: "dbs"

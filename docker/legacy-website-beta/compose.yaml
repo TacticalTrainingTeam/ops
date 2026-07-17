@@ -61,6 +61,9 @@ services:
       interval: "10s"
       timeout: "5s"
       retries: 3
+    networks:
+      - "default"
+      - "dbs"
   db-backup:
     container_name: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
     image: "tiredofit/db-backup:4.1.100"
@@ -90,7 +93,10 @@ volumes:
       device: "//${SMB_HOST:?error}/${SMB_PATH_MISSIONS:?error}"
 
 networks:
-  default: {}
+  default:
   proxy:
     external: true
     name: "proxy"
+  dbs:
+    external: true
+    name: "dbs"

@@ -95,6 +95,9 @@ services:
       POSTGRES_DB: "authentik"
       POSTGRES_USER: "${DATABASE_USERNAME:?error}"
       POSTGRES_PASSWORD: "${DATABASE_PASSWORD:?error}"
+    networks:
+      - "default"
+      - "dbs"
 
   db-backup:
     container_name: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
@@ -122,3 +125,6 @@ networks:
   proxy:
     external: true
     name: "proxy"
+  dbs:
+    external: true
+    name: "dbs"

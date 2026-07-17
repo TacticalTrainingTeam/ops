@@ -21,6 +21,9 @@ services:
       interval: "10s"
       timeout: "5s"
       retries: 3
+    networks:
+      - "default"
+      - "dbs"
   db-backup:
     container_name: "${COMPOSE_PROJECT_NAME:?error}-db-backup"
     image: "tiredofit/db-backup:4.1.100"
@@ -41,3 +44,9 @@ services:
       DB01_NAME: "armaservermanager"
       DB01_USER: "${DB_USERNAME:?error}"
       DB01_PASS: "${DB_PASSWORD:?error}"
+
+networks:
+  default:
+  dbs:
+    external: true
+    name: "dbs"
