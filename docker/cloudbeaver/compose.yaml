@@ -1,0 +1,26 @@
+services:
+  cloudbeaver:
+    image: "dbeaver/cloudbeaver:26.1.2"
+    container_name: "cloudbeaver"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    environment:
+      TZ: "Europe/Berlin"
+    networks:
+      dbs:
+      proxy:
+    labels:
+      traefik.enable: true
+      traefik.http.routers.cloudbeaver.entrypoints: "websecure-internal"
+      traefik.http.routers.cloudbeaver.rule: "Host(`dbs.${TRAEFIK_DOMAINNAME_1:?error}`)"
+      traefik.http.routers.cloudbeaver.service: "cloudbeaver"
+      traefik.http.services.cloudbeaver.loadbalancer.server.port: 8978
+    volumes:
+      - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/workspace:/opt/cloudbeaver/workspace:z"
+networks:
+  dbs:
+    name: "dbs"
+  proxy:
+    external: true
+    name: "proxy"

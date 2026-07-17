@@ -47,6 +47,9 @@ configs:
           ${IPV4:?error} asm.${DOMAINNAME?error}
           ${IPV6:?error} asm.${DOMAINNAME?error}
       
+          ${IPV4:?error} dbs.${DOMAINNAME?error}
+          ${IPV6:?error} dbs.${DOMAINNAME?error}
+      
           fallthrough
         }
       
