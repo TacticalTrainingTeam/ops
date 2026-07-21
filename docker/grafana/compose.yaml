@@ -1,7 +1,7 @@
 services:
   grafana:
     container_name: "${COMPOSE_PROJECT_NAME:?error}"
-    image: "grafana/grafana:13.1.0"
+    image: "grafana/grafana:13.1.1"
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
