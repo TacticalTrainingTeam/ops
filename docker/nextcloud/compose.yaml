@@ -32,6 +32,7 @@ services:
       traefik.http.middlewares.nextcloud_redirectregex.redirectregex.replacement: "https://$${1}/remote.php/dav"
     volumes:
       - "nextcloud:/var/www/html:z"
+      - "missions:/mpmissions"
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/custom_apps:/var/www/html/custom_apps:z"
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/config:/var/www/html/config:z"
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/data:/var/www/html/data:z"
