@@ -132,6 +132,12 @@ networks:
 volumes:
   nextcloud:
   redis:
+  missions:
+    driver: "local"
+    driver_opts:
+      type: "cifs"
+      o: "username=${SMB_USERNAME:?error},password=${SMB_PASSWORD:?error},rw,noperm,file_mode=0777,dir_mode=0777"
+      device: "//${SMB_HOST:?error}/${SMB_PATH_MISSIONS:?error}"
 
 configs:
   hide-emails-in-user-search:
