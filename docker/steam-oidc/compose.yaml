@@ -21,3 +21,7 @@ services:
       traefik.http.routers.steam-oidc.rule: "Host(`steam-oidc.${TRAEFIK_DOMAINNAME_1:?error}`)"
       traefik.http.routers.steam-oidc.service: "steam-oidc"
       traefik.http.services.steam-oidc.loadbalancer.server.port: 8080
+networks:
+  proxy:
+    external: true
+    name: "proxy"
