@@ -1,0 +1,23 @@
+services:
+  app:
+    image: "ghcr.io/byo-software/steam-openid-connect-provider:1.1.1"
+    container_name: "${COMPOSE_PROJECT_NAME:?error}-app"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    environment:
+      TZ: "Europe/Berlin"
+      OpenId__RedirectUri: "${REDIRECT_URI:?error}"
+      OpenId__ClientId: "${CLIENT_ID:?error}"
+      OpenId__ClientSecret: "${CLIENT_SECRET:?error}"
+      OpenId__ClientName: "${CLIENT_NAME:?error}"
+      Steam__ApplicationKey: "${STEAM_API_KEY:?error}"
+      Hosting__PublicOrigin: "https://steam-oidc.${TRAEFIK_DOMAINNAME_1:?error}"
+    networks:
+      proxy:
+    labels:
+      traefik.enable: true
+      traefik.http.routers.steam-oidc.entrypoints: "websecure-internal,websecure-external"
+      traefik.http.routers.steam-oidc.rule: "Host(`steam-oidc.${TRAEFIK_DOMAINNAME_1:?error}`)"
+      traefik.http.routers.steam-oidc.service: "steam-oidc"
+      traefik.http.services.steam-oidc.loadbalancer.server.port: 8080

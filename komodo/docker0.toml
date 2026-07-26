@@ -375,6 +375,27 @@ OCAP_AUTH_ADMINSTEAMIDS=[[OCAP_AUTH_ADMINSTEAMIDS]]
 ##
 
 [[stack]]
+name = "steam-oidc"
+[stack.config]
+server = "local"
+run_build = true
+poll_for_updates = true
+destroy_before_deploy = true
+linked_repo = "ops"
+run_directory = "docker/steam-oidc"
+environment = """
+DOCKER_DATA_DIR=[[DOCKER_DATA_DIR]]
+TRAEFIK_DOMAINNAME_1=[[TRAEFIK_DOMAINNAME_1]]
+REDIRECT_URI=[[STEAM_OIDC_REDIRECT_URI]]
+CLIENT_ID=[[STEAM_OIDC_CLIENT_ID]]
+CLIENT_SECRET=[[STEAM_OIDC_CLIENT_SECRET]]
+CLIENT_NAME=[[STEAM_OIDC_CLIENT_NAME]]
+STEAM_API_KEY=[[STEAM_OIDC_STEAM_API_KEY]]
+"""
+
+##
+
+[[stack]]
 name = "traefik"
 [stack.config]
 server = "local"
