@@ -5,6 +5,14 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "SETUID"
+      - "SETGID"
+      - "FOWNER"
+      - "DAC_OVERRIDE"
     environment:
       DISCORD_TOKEN: "${DISCORD_TOKEN:?error}"
       CLIENT_ID: "${CLIENT_ID:?error}"
