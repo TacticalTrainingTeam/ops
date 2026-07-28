@@ -6,6 +6,13 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "FOWNER"
+      - "SETUID"
+      - "SETGID"
     depends_on:
       db:
         condition: "service_healthy"
@@ -51,12 +58,19 @@ services:
     container_name: "${COMPOSE_PROJECT_NAME:?error}-worker"
     command: "worker"
     restart: "unless-stopped"
+    user: "root"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "FOWNER"
+      - "SETUID"
+      - "SETGID"
     depends_on:
       db:
         condition: "service_healthy"
-    user: "root"
     volumes:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/data:/data:z"
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/templates:/templates:z"
@@ -83,6 +97,14 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "SETUID"
+      - "SETGID"
+      - "FOWNER"
+      - "DAC_OVERRIDE"
     healthcheck:
       interval: "30s"
       retries: 5
@@ -105,6 +127,14 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "SETUID"
+      - "SETGID"
+      - "FOWNER"
+      - "DAC_OVERRIDE"
     volumes:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db-backups:/backup:z"
     environment:
