@@ -5,6 +5,12 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "SETUID"
+      - "SETGID"
     environment:
       TZ: "Europe/Berlin"
       APP_NAME: "Tactical Training Team | Arma MilSim Community"
@@ -38,7 +44,7 @@ services:
       traefik.http.middlewares.redirect-www-to-non-www.redirectregex.regex: "^https://www\\.(.*)"
       traefik.http.middlewares.redirect-www-to-non-www.redirectregex.replacement: "https://$$1"
     volumes:
-      - "missions:/missions:Z"
+      - "missions:/missions:z"
     depends_on:
       db:
         condition: "service_healthy"
@@ -49,6 +55,13 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "SETUID"
+      - "SETGID"
+      - "DAC_OVERRIDE"
     environment:
       MARIADB_AUTO_UPGRADE: "1"
       MARIADB_DISABLE_UPGRADE_BACKUP: "1"
@@ -74,6 +87,14 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "SETUID"
+      - "SETGID"
+      - "FOWNER"
+      - "DAC_OVERRIDE"
     volumes:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db-backups:/backup:z"
     environment:
