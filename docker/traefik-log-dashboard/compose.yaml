@@ -5,6 +5,14 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "SETUID"
+      - "SETGID"
+      - "FOWNER"
+      - "DAC_OVERRIDE"
     healthcheck:
       test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:5000/api/logs/status" ]
       interval: 2m
@@ -30,6 +38,14 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "SETUID"
+      - "SETGID"
+      - "FOWNER"
+      - "DAC_OVERRIDE"
     depends_on:
       agent:
         condition: "service_healthy"
