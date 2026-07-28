@@ -5,6 +5,12 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "SETUID"
+      - "SETGID"
     environment:
       MATOMO_DATABASE_HOST: "db"
       MATOMO_DATABASE_ADAPTER: "mysql"
@@ -33,6 +39,13 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "SETUID"
+      - "SETGID"
+      - "DAC_OVERRIDE"
     command:
       - "--max-allowed-packet=64MB"
     environment:
@@ -61,6 +74,14 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "SETUID"
+      - "SETGID"
+      - "FOWNER"
+      - "DAC_OVERRIDE"
     volumes:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db-backups:/backup:z"
     environment:
