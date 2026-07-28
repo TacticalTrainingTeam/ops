@@ -8,16 +8,19 @@ services:
     security_opt:
       - "label:disable" # Disable SELinux labels for compatibility with Kopia
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "DAC_READ_SEARCH"
     command:
       - "server"
       - "start"
-      - "--disable-csrf-token-checks"
       - "--insecure"
       - "--address=0.0.0.0:51515"
-      - "--server-username=${SERVER_USERNAME?error}"
-      - "--server-password=${SERVER_PASSWORD?error}"
     environment:
       KOPIA_PASSWORD: "${REPOSITORY_PASSWORD:?error}"
+      KOPIA_SERVER_USERNAME: "${SERVER_USERNAME:?error}"
+      KOPIA_SERVER_PASSWORD: "${SERVER_PASSWORD:?error}"
       USER: "${USER:-kopia}"
       TZ: "Europe/Berlin"
     networks:
