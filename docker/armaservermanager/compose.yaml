@@ -5,6 +5,13 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "SETUID"
+      - "SETGID"
+      - "DAC_OVERRIDE"
     ports:
       - "3306:3306"
     environment:
@@ -30,6 +37,14 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "SETUID"
+      - "SETGID"
+      - "FOWNER"
+      - "DAC_OVERRIDE"
     volumes:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db-backups:/backup:z"
     environment:
