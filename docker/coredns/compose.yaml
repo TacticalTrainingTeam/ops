@@ -6,6 +6,10 @@ services:
     command: "-conf /etc/coredns/Corefile -dns.port 53"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "NET_BIND_SERVICE"
     ports:
       - "${IPV4:?error}:53:53"
       - "${IPV4:?error}:53:53/udp"
@@ -18,37 +22,37 @@ services:
 configs:
   corefile:
     content: |
-      ${DOMAINNAME?error} {
+      ${DOMAINNAME:?error} {
         log
         errors
       
         hosts {
-          ${IPV4:?error} backup.${DOMAINNAME?error}
-          ${IPV6:?error} backup.${DOMAINNAME?error}
+          ${IPV4:?error} backup.${DOMAINNAME:?error}
+          ${IPV6:?error} backup.${DOMAINNAME:?error}
       
-          ${IPV4:?error} komodo.${DOMAINNAME?error}
-          ${IPV6:?error} komodo.${DOMAINNAME?error}
+          ${IPV4:?error} komodo.${DOMAINNAME:?error}
+          ${IPV6:?error} komodo.${DOMAINNAME:?error}
       
-          ${IPV4:?error} docker0.${DOMAINNAME?error}
-          ${IPV6:?error} docker0.${DOMAINNAME?error}
+          ${IPV4:?error} docker0.${DOMAINNAME:?error}
+          ${IPV6:?error} docker0.${DOMAINNAME:?error}
       
-          ${IPV4:?error} traefik.${DOMAINNAME?error}
-          ${IPV6:?error} traefik.${DOMAINNAME?error}
+          ${IPV4:?error} traefik.${DOMAINNAME:?error}
+          ${IPV6:?error} traefik.${DOMAINNAME:?error}
       
-          ${IPV4:?error} traefik-log-dashboard.${DOMAINNAME?error}
-          ${IPV6:?error} traefik-log-dashboard.${DOMAINNAME?error}
+          ${IPV4:?error} traefik-log-dashboard.${DOMAINNAME:?error}
+          ${IPV6:?error} traefik-log-dashboard.${DOMAINNAME:?error}
       
-          ${IPV4:?error} beszel.${DOMAINNAME?error}
-          ${IPV6:?error} beszel.${DOMAINNAME?error}
+          ${IPV4:?error} beszel.${DOMAINNAME:?error}
+          ${IPV6:?error} beszel.${DOMAINNAME:?error}
       
-          ${IPV4:?error} ifxmetrics.${DOMAINNAME?error}
-          ${IPV6:?error} ifxmetrics.${DOMAINNAME?error}
+          ${IPV4:?error} ifxmetrics.${DOMAINNAME:?error}
+          ${IPV6:?error} ifxmetrics.${DOMAINNAME:?error}
       
-          ${IPV4:?error} asm.${DOMAINNAME?error}
-          ${IPV6:?error} asm.${DOMAINNAME?error}
+          ${IPV4:?error} asm.${DOMAINNAME:?error}
+          ${IPV6:?error} asm.${DOMAINNAME:?error}
       
-          ${IPV4:?error} dbs.${DOMAINNAME?error}
-          ${IPV6:?error} dbs.${DOMAINNAME?error}
+          ${IPV4:?error} dbs.${DOMAINNAME:?error}
+          ${IPV6:?error} dbs.${DOMAINNAME:?error}
       
           fallthrough
         }
