@@ -5,6 +5,12 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "SETUID"
+      - "SETGID"
     environment:
       TZ: "Europe/Berlin"
     networks:
@@ -28,6 +34,13 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "SETUID"
+      - "SETGID"
+      - "DAC_OVERRIDE"
     environment:
       MARIADB_AUTO_UPGRADE: "1"
       MARIADB_DISABLE_UPGRADE_BACKUP: "1"
@@ -53,6 +66,14 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    cap_add:
+      - "CHOWN"
+      - "SETUID"
+      - "SETGID"
+      - "FOWNER"
+      - "DAC_OVERRIDE"
     volumes:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db-backups:/backup:z"
     environment:
