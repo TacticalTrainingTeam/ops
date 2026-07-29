@@ -58,7 +58,7 @@ services:
       traefik.http.middlewares.xff2realip.plugin.traefik-xff-to-xrealip.depth: 0
 
   whoami:
-    image: "traefik/whoami:v1.11.0"
+    image: "traefik/whoami:v1.12.0"
     container_name: "whoami"
     restart: "unless-stopped"
     security_opt:
