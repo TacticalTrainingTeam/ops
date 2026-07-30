@@ -42,6 +42,7 @@ services:
       - "[${ENTRYPOINT_EXTERNAL_IPV6:?error}]:80:80"
       - "[${ENTRYPOINT_EXTERNAL_IPV6:?error}]:443:443"
       - "[${ENTRYPOINT_EXTERNAL_IPV6:?error}]:443:443/udp" # http3
+      - "8090:8090"
     healthcheck:
       test: [ 'CMD', 'traefik', 'healthcheck', '--ping' ]
     volumes:
