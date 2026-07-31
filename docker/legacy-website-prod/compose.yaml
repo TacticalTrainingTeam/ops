@@ -44,7 +44,7 @@ services:
       traefik.http.middlewares.redirect-www-to-non-www.redirectregex.regex: "^https://www\\.(.*)"
       traefik.http.middlewares.redirect-www-to-non-www.redirectregex.replacement: "https://$$1"
     volumes:
-      - "missions:/missions:z"
+      - "missions:/missions"
     depends_on:
       db:
         condition: "service_healthy"
