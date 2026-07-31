@@ -100,7 +100,7 @@ services:
       timeout: "5s"
       retries: 3
     volumes:
-      - "redis:/data:z"
+      - "redis:/data:Z"
 
   db:
     image: "mariadb:lts"
