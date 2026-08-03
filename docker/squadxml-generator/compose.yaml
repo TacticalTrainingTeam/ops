@@ -1,0 +1,21 @@
+services:
+  squadxml-generator:
+    build: "https://github.com/TacticalTrainingTeam/squadxml-generator.git"
+    container_name: "squadxml-generator"
+    restart: "unless-stopped"
+    security_opt:
+      - "no-new-privileges:true"
+    cap_drop:
+      - "ALL"
+    environment:
+      TIMEZONE: "Europe/Berlin"
+      AUTHENTIK_BASE_URL: "${AUTHENTIK_BASE_URL:?error}"
+      AUTHENTIK_BEARER_TOKEN: "${AUTHENTIK_BEARER_TOKEN:?error}"
+    networks:
+      proxy:
+    labels:
+      traefik.enable: true
+      traefik.http.routers.squadxml-generator.entrypoints: "websecure-internal,websecure-external"
+      traefik.http.routers.squadxml-generator.rule: "Host(`squadxml.${TRAEFIK_DOMAINNAME_1:?error}`)"
+      traefik.http.routers.squadxml-generator.service: "squadxml-generator"
+      traefik.http.services.squadxml-generator.loadbalancer.server.port: 8080

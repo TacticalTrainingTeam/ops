@@ -375,6 +375,23 @@ OCAP_AUTH_ADMINSTEAMIDS=[[OCAP_AUTH_ADMINSTEAMIDS]]
 ##
 
 [[stack]]
+name = "squadxml-generator"
+[stack.config]
+server = "local"
+run_build = true
+poll_for_updates = true
+destroy_before_deploy = true
+linked_repo = "ops"
+webhook_force_deploy = true
+run_directory = "docker/squadxml-generator"
+environment = """
+AUTHENTIK_BASE_URL=[[SQUADXML_GENERATOR_AUTHENTIK_BASE_URL]]
+AUTHENTIK_BEARER_TOKEN=[[SQUADXML_GENERATOR_AUTHENTIK_BEARER_TOKEN]]
+"""
+
+##
+
+[[stack]]
 name = "steam-oidc"
 [stack.config]
 server = "local"
