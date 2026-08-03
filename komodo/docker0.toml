@@ -385,6 +385,7 @@ linked_repo = "ops"
 webhook_force_deploy = true
 run_directory = "docker/squadxml-generator"
 environment = """
+TRAEFIK_DOMAINNAME_1=[[TRAEFIK_DOMAINNAME_1]]
 AUTHENTIK_BASE_URL=[[SQUADXML_GENERATOR_AUTHENTIK_BASE_URL]]
 AUTHENTIK_BEARER_TOKEN=[[SQUADXML_GENERATOR_AUTHENTIK_BEARER_TOKEN]]
 """
