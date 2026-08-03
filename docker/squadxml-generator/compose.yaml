@@ -19,3 +19,7 @@ services:
       traefik.http.routers.squadxml-generator.rule: "Host(`squadxml.${TRAEFIK_DOMAINNAME_1:?error}`)"
       traefik.http.routers.squadxml-generator.service: "squadxml-generator"
       traefik.http.services.squadxml-generator.loadbalancer.server.port: 8080
+networks:
+  proxy:
+    name: "proxy"
+    external: true
