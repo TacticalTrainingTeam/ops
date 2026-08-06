@@ -5,12 +5,6 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
-    cap_drop:
-      - "ALL"
-    cap_add:
-      - "CHOWN"
-      - "SETUID"
-      - "SETGID"
     environment:
       TZ: "Europe/Berlin"
       REDIS_HOST: "redis"
@@ -50,7 +44,7 @@ services:
       db:
         condition: "service_healthy"
       redis:
-        condition: "service_healthy"
+        condition: "service_started"
 
   cron:
     image: "nextcloud:34.0.2-apache"
@@ -59,12 +53,6 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
-    cap_drop:
-      - "ALL"
-    cap_add:
-      - "CHOWN"
-      - "SETUID"
-      - "SETGID"
     environment:
       TZ: "Europe/Berlin"
     # volumes must be identical to the app container
@@ -77,7 +65,7 @@ services:
       db:
         condition: "service_healthy"
       redis:
-        condition: "service_healthy"
+        condition: "service_started"
 
   redis:
     image: "redis:8.8.1-alpine"
@@ -85,22 +73,8 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
-    cap_drop:
-      - "ALL"
-    cap_add:
-      - "CHOWN"
-      - "SETUID"
-      - "SETGID"
-      - "FOWNER"
-      - "DAC_OVERRIDE"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      start_period: "10s"
-      interval: "10s"
-      timeout: "5s"
-      retries: 3
     volumes:
-      - "redis:/data:z"
+      - "redis:/data:Z"
 
   db:
     image: "mariadb:lts"
@@ -109,13 +83,6 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
-    cap_drop:
-      - "ALL"
-    cap_add:
-      - "CHOWN"
-      - "SETUID"
-      - "SETGID"
-      - "DAC_OVERRIDE"
     environment:
       MARIADB_AUTO_UPGRADE: "1"
       MARIADB_DISABLE_UPGRADE_BACKUP: "1"
@@ -141,14 +108,6 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
-    cap_drop:
-      - "ALL"
-    cap_add:
-      - "CHOWN"
-      - "SETUID"
-      - "SETGID"
-      - "FOWNER"
-      - "DAC_OVERRIDE"
     volumes:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db-backups:/backup:z"
     environment:
