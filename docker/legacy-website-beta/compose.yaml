@@ -41,7 +41,7 @@ services:
       traefik.http.routers.legacy-website-beta.service: "legacy-website-beta"
       traefik.http.services.legacy-website-beta.loadbalancer.server.port: 80
     volumes:
-      - "missions:/missions"
+      - "missions:/missions:z"
     depends_on:
       db:
         condition: "service_healthy"
