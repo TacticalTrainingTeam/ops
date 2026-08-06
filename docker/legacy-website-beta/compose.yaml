@@ -5,12 +5,6 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
-    cap_drop:
-      - "ALL"
-    cap_add:
-      - "CHOWN"
-      - "SETUID"
-      - "SETGID"
     environment:
       TZ: "Europe/Berlin"
       APP_NAME: "Tactical Training Team | Arma MilSim Community"
@@ -41,7 +35,7 @@ services:
       traefik.http.routers.legacy-website-beta.service: "legacy-website-beta"
       traefik.http.services.legacy-website-beta.loadbalancer.server.port: 80
     volumes:
-      - "missions:/missions:z"
+      - "missions:/missions:Z"
     depends_on:
       db:
         condition: "service_healthy"
@@ -51,13 +45,6 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
-    cap_drop:
-      - "ALL"
-    cap_add:
-      - "CHOWN"
-      - "SETUID"
-      - "SETGID"
-      - "DAC_OVERRIDE"
     environment:
       MARIADB_AUTO_UPGRADE: "1"
       MARIADB_DISABLE_UPGRADE_BACKUP: "1"
@@ -83,14 +70,6 @@ services:
     restart: "unless-stopped"
     security_opt:
       - "no-new-privileges:true"
-    cap_drop:
-      - "ALL"
-    cap_add:
-      - "CHOWN"
-      - "SETUID"
-      - "SETGID"
-      - "FOWNER"
-      - "DAC_OVERRIDE"
     volumes:
       - "${DOCKER_DATA_DIR:?error}/${COMPOSE_PROJECT_NAME:?error}/db-backups:/backup:z"
     environment:
