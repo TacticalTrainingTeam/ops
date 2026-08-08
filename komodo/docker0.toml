@@ -451,6 +451,22 @@ AUTH_TOKEN=[[TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN]]
 
 ##
 
+[[stack]]
+name = "website-staging"
+[stack.config]
+server = "local"
+run_build = true
+poll_for_updates = true
+destroy_before_deploy = true
+linked_repo = "ops"
+webhook_force_deploy = true
+run_directory = "docker/website-staging"
+environment = """
+TRAEFIK_DOMAINNAME_1=[[TRAEFIK_DOMAINNAME_1]]
+"""
+
+##
+
 [[repo]]
 name = "ops"
 [repo.config]
