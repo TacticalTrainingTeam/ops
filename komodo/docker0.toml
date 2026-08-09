@@ -399,6 +399,21 @@ AUTH_TOKEN=[[TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN]]
 ##
 
 [[stack]]
+name = "website-prod"
+[stack.config]
+server = "local"
+run_build = true
+poll_for_updates = true
+destroy_before_deploy = true
+linked_repo = "ops"
+run_directory = "docker/website-prod"
+environment = """
+TRAEFIK_DOMAINNAME_1=[[TRAEFIK_DOMAINNAME_1]]
+"""
+
+##
+
+[[stack]]
 name = "website-staging"
 [stack.config]
 server = "local"

@@ -9,6 +9,8 @@ services:
       - "ALL"
     cap_add:
       - "NET_BIND_SERVICE"
+    environment:
+      TZ: "Europe/Berlin"
     networks:
       - "proxy"
     labels:
