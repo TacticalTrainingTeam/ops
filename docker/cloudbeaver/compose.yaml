@@ -11,7 +11,6 @@ services:
       - "CHOWN"
       - "SETUID"
       - "SETGID"
-      - "FOWNER"
       - "DAC_OVERRIDE"
     environment:
       TZ: "Europe/Berlin"
