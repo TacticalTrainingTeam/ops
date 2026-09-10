@@ -7,12 +7,6 @@ services:
       - "no-new-privileges:true"
     cap_drop:
       - "ALL"
-    cap_add:
-      - "CHOWN"
-      - "SETUID"
-      - "SETGID"
-      - "FOWNER"
-      - "DAC_OVERRIDE"
     environment:
       OCAP_SECRET: "${OCAP_SECRET:?error}"
       OCAP_CUSTOMIZE_ENABLED: "true"
