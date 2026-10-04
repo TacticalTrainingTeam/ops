@@ -8,11 +8,6 @@ services:
       - "no-new-privileges:true"
     cap_drop:
       - "ALL"
-    cap_add:
-      - "CHOWN"
-      - "FOWNER"
-      - "SETUID"
-      - "SETGID"
     depends_on:
       db:
         condition: "service_healthy"
@@ -63,11 +58,6 @@ services:
       - "no-new-privileges:true"
     cap_drop:
       - "ALL"
-    cap_add:
-      - "CHOWN"
-      - "FOWNER"
-      - "SETUID"
-      - "SETGID"
     depends_on:
       db:
         condition: "service_healthy"
