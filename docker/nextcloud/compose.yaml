@@ -1,6 +1,6 @@
 services:
   app:
-    image: "nextcloud:34.0.4-apache"
+    image: "nextcloud:35.0.2-apache"
     container_name: "${COMPOSE_PROJECT_NAME:?error}-app"
     restart: "unless-stopped"
     security_opt:
@@ -56,7 +56,7 @@ services:
         condition: "service_started"
 
   cron:
-    image: "nextcloud:34.0.4-apache"
+    image: "nextcloud:35.0.2-apache"
     entrypoint: "/cron.sh"
     container_name: "${COMPOSE_PROJECT_NAME:?error}-cron"
     restart: "unless-stopped"
